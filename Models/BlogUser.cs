@@ -9,23 +9,23 @@ namespace JohnBlog.Models
         [Required]
         [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [BindProperty]
-        public BlogImage Image { get; set; }
+        public BlogImage? Image { get; set; }
 
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
-        public string FacebookUrl { get; set; }
+        public string? FacebookUrl { get; set; }
 
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
-        public string TwitterUrl { get; set; }
+        public string? TwitterUrl { get; set; }
 
-        public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
-        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+        public virtual ICollection<Blog>? Blogs { get; set; } = new List<Blog>();
+        public virtual ICollection<Post>? Posts { get; set; } = new List<Post>();
     }
 }
