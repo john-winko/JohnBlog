@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace JohnBlog.Models
 {
@@ -24,6 +25,7 @@ namespace JohnBlog.Models
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
+        [BindProperty]
         public BlogImage? Image { get; set; }
 
         [Display(Name = "Author")]

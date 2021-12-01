@@ -57,10 +57,13 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogUserID,Name,Description,Created,Updated")] Blog blog)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Image")] Blog blog)
         {
+            // getting bloguserid from the currently logged in user
+            // Created,Updated set programatticaly
             if (ModelState.IsValid)
             {
+                blog.Created = DateTime.Now;
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
