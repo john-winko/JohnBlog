@@ -1,4 +1,6 @@
 using JohnBlog.Data;
+using JohnBlog.Models;
+using JohnBlog.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +12,25 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddDefaultUI()
+    .AddDefaultTokenProviders()
+  // .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+
+// register services
+builder.Services.AddScoped<DataService>();
 
 var app = builder.Build();
+
+await app.Services
+    .CreateScope()
+    .ServiceProvider
+    .GetRequiredService<DataService>()
+    .SeedDatabaseAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
