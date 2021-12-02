@@ -18,19 +18,19 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
   // .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+//builder.Services.AddRazorPages();
 
 
 // register services
-builder.Services.AddScoped<DataService>();
+//builder.Services.AddScoped<DataService>();
 
 var app = builder.Build();
 
-await app.Services
-    .CreateScope()
-    .ServiceProvider
-    .GetRequiredService<DataService>()
-    .SeedDatabaseAsync();
+//await app.Services
+//    .CreateScope()
+//    .ServiceProvider
+//    .GetRequiredService<DataService>()
+//    .SeedDatabaseAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
