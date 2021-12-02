@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JohnBlog.Models
 {
@@ -18,11 +17,11 @@ namespace JohnBlog.Models
         public string Description { get; set; } = string.Empty;
 
 
-        [Column(TypeName = "timestamp without time zone")]
+        [DataType(DataType.Date)]
         [Display(Name = "Created Date")]
         public DateTime Created { get; set; }
 
-        [Column(TypeName = "timestamp without time zone")]
+        [DataType(DataType.Date)]
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
