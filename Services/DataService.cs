@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace JohnBlog.Services
 {
+    // TODO: use a json file to populate users, example posts etc
     public class DataService
     {
         private readonly ApplicationDbContext dbContext;
