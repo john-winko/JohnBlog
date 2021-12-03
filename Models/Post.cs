@@ -35,7 +35,7 @@ namespace JohnBlog.Models
 
         public string? Slug { get; set; }
 
-        // TODO add image data
+        public BlogImage BlogImage { get; set; }
 
         // Navigation properties
         public virtual Blog? Blog { get; set; }
