@@ -43,19 +43,19 @@ namespace JohnBlog.Services
             var adminUser = new BlogUser()
             {
                 Email = "john.winko@gmail.com",
-                UserName = "Admin-John",                
+                UserName = "john.winko@gmail.com",                
                 FirstName = "John",
                 LastName = "Winko",
                 PhoneNumber = "(904) 703-4856",
                 EmailConfirmed = true
             };
-            await userManager.CreateAsync(adminUser, "asdfASDF1234!@#$");
+            await userManager.CreateAsync(adminUser, "Abc&123!");
             await userManager.AddToRoleAsync(adminUser, BlogRole.Administrator.ToString());
 
             var moderatorUser = new BlogUser()
             {
                 Email = "eternal81@msn.com",
-                UserName = "Mod-John",
+                UserName = "eternal81@msn.com",
                 FirstName = "John",
                 LastName = "Winko",
                 PhoneNumber = "(904) 703-4856",
