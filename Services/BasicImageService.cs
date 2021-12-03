@@ -1,4 +1,6 @@
-﻿namespace JohnBlog.Services;
+﻿using JohnBlog.Models;
+
+namespace JohnBlog.Services;
 
 public class BasicImageService : IImageService
 {

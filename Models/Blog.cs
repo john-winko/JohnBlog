@@ -25,7 +25,7 @@ namespace JohnBlog.Models
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
-        // TODO add image data
+        public BlogImage? BlogImage { get; set; }
 
         [Display(Name = "Author")]
         public virtual BlogUser? BlogUser { get; set; } 
