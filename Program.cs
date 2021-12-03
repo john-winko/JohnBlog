@@ -25,6 +25,7 @@ builder.Services.AddRazorPages();
 
 // register services
 builder.Services.AddScoped<DataService>();
+builder.Services.AddScoped<IImageService, BasicImageService>();
 
 var app = builder.Build();
 

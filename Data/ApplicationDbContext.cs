@@ -13,6 +13,6 @@ namespace JohnBlog.Data
         }
 
         public DbSet<Blog>? Blogs { get; set; }
-        public DbSet<BlogImage>? BlogImages { get; set; }
+        //public DbSet<BlogImage>? BlogImages { get; set; }
     }
 }
