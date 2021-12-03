@@ -75,7 +75,6 @@ namespace JohnBlog.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
-            //UserImage = _imageService.DecodeImage(user.ImageData, user.ContentType);
             UserImage = _imageService.DecodeImage(user.BlogImage.ImageData, user.BlogImage.ContentType);
             Input = new InputModel
             {
@@ -122,10 +121,8 @@ namespace JohnBlog.Areas.Identity.Pages.Account.Manage
 
             if (Input.Image is not null)
             {
-                user.ImageData = await _imageService.EncodeImageAsync(Input.Image);
-                user.ContentType = _imageService.ContentType(Input.Image);
-                user.BlogImage.ImageData = user.ImageData;
-                user.BlogImage.ContentType = user.ContentType;
+                user.BlogImage.ImageData = await _imageService.EncodeImageAsync(Input.Image);
+                user.BlogImage.ContentType= _imageService.ContentType(Input.Image);
                 await _userManager.UpdateAsync(user);
             }
               
