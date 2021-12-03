@@ -7,9 +7,9 @@ public class BasicImageService : IImageService
         return file.ContentType;
     }
 
-    public string? DecodeImage(byte[]? data, string? type)
+    public string DecodeImage(byte[]? data, string? type)
     {
-        if (data is null || type is null) return null; // guard statement
+        if (data is null || type is null) return string.Empty; // guard statement
         return $"data:image/{type};base64,{Convert.ToBase64String(data)}";
     }
 
