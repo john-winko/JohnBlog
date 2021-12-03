@@ -16,6 +16,8 @@ namespace JohnBlog.Models
         [Display(Name = "Last Name")]
         public string? LastName { get; set; }
 
+        public BlogImage BlogImage { get; set; } = new();
+        
         [Display(Name = "Blog Image")]
         public byte[]? ImageData { get; set; }
 
