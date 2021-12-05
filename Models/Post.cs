@@ -10,7 +10,7 @@ namespace JohnBlog.Models
         [Display(Name = "Blog Name")]
         public int BlogId { get; set; }
 
-        public string? BlogUserId { get; set; }
+        public string BlogUserId { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
@@ -35,7 +35,7 @@ namespace JohnBlog.Models
 
         public string? Slug { get; set; }
 
-        public BlogImage BlogImage { get; set; }
+        public BlogImage? BlogImage { get; set; }
 
         // Navigation properties
         public virtual Blog? Blog { get; set; }
