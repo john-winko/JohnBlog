@@ -35,9 +35,8 @@ namespace JohnBlog.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string Username { get; set; }
-
-        public string UserImage { get; set; }
-        
+        public IFormFile FormFile { get; set; }
+    
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -50,36 +49,17 @@ namespace JohnBlog.Areas.Identity.Pages.Account.Manage
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [BindProperty]
-        public InputModel Input { get; set; }
+        public BlogUser Input { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public class InputModel
-        {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
-            
-            public IFormFile Image { get; set; }
-        }
 
         private async Task LoadAsync(BlogUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
-            UserImage = _imageService.DecodeImage(user.BlogImage.ImageData, user.BlogImage.ContentType);
-            Input = new InputModel
-            {
-                PhoneNumber = phoneNumber,
-            };
+            Username = await _userManager.GetUserNameAsync(user);
+            Input = user;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -108,24 +88,22 @@ namespace JohnBlog.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
-                }
-            }
+            // Only over write if not null
+            user.PhoneNumber = Input.PhoneNumber ?? user.PhoneNumber;
+            // TODO update image service to return a BlogImage type to save
+            user.BlogImage.ImageData = await _imageService.EncodeImageAsync(FormFile) ?? user.BlogImage.ImageData;
+            user.BlogImage.ContentType = _imageService.ContentType(FormFile) ?? user.BlogImage.ContentType;
 
-            if (Input.Image is not null)
-            {
-                user.BlogImage.ImageData = await _imageService.EncodeImageAsync(Input.Image);
-                user.BlogImage.ContentType= _imageService.ContentType(Input.Image);
-                await _userManager.UpdateAsync(user);
-            }
-              
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.Title = Input.Title;
+            user.Blurb = Input.Blurb;
+            user.FacebookUrl = Input.FacebookUrl;
+            user.TwitterUrl = Input.TwitterUrl;
+            user.LinkedInUrl = Input.LinkedInUrl;
+            
+            await _userManager.UpdateAsync(user);
+            
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
