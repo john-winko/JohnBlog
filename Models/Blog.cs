@@ -6,7 +6,7 @@ namespace JohnBlog.Models
     public class Blog
     {
         public int Id { get; set; }
-        public string BlogUserID { get; set; } = string.Empty;
+        public string BlogUserId { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be between {1} and {2} characters long.", MinimumLength = 2)]
@@ -15,7 +15,6 @@ namespace JohnBlog.Models
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be between {1} and {2} characters long.", MinimumLength = 2)]
         public string Description { get; set; } = string.Empty;
-
 
         [DataType(DataType.Date)]
         [Display(Name = "Created Date")]

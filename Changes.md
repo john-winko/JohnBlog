@@ -56,3 +56,5 @@ Use BlogUser as identity
 				Update ApplicationDBContext declared as public class ApplicationDbContext : IdentityDbContext<BlogUser> 
 Updated DataService seeding to use same username as email (will have to completly revise the login areas to accomodate non-email logins since that is what it validates against)
 Migrations are no longer necessary since the  await dbContext.Database.EnsureCreatedAsync(); will update database based on current Model (update for later is to migrate this into the model snapshot to seed the data)
+Made a small mistake of not logging out/in after doing a database drop/create. Identity would persist until (showing logged in name) until 
+Previously used two fields to manage Images, but decided to make an Image Model as an owned class. (Good for code readability, bad for how it looks in the database)
