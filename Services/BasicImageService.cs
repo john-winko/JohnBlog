@@ -4,14 +4,14 @@ namespace JohnBlog.Services;
 
 public class BasicImageService : IImageService
 {
-    public string ContentType(IFormFile file)
+    public string? ContentType(IFormFile? file)
     {
-        return file.ContentType;
+        return file?.ContentType;
     }
 
-    public string DecodeImage(byte[]? data, string? type)
+    public string? DecodeImage(byte[]? data, string? type)
     {
-        if (data is null || type is null) return string.Empty; // guard statement
+        if (data is null || type is null) return null; // guard statement
         return $"data:image/{type};base64,{Convert.ToBase64String(data)}";
     }
 
@@ -23,7 +23,7 @@ public class BasicImageService : IImageService
         return ms.ToArray();
     }
 
-    public async Task<byte[]> EncodeImageAsync(string fileName)
+    public async Task<byte[]?> EncodeImageAsync(string fileName)
     {
         var file = $"{Directory.GetCurrentDirectory()}/wwwroot/images/{fileName}";
         return await File.ReadAllBytesAsync(file);

@@ -58,4 +58,7 @@ Updated DataService seeding to use same username as email (will have to completl
 Migrations are no longer necessary since the  await dbContext.Database.EnsureCreatedAsync(); will update database based on current Model (update for later is to migrate this into the model snapshot to seed the data)
 Made a small mistake of not logging out/in after doing a database drop/create. Identity would persist until (showing logged in name) until 
 Previously used two fields to manage Images, but decided to make an Image Model as an owned class. (Good for code readability, bad for how it looks in the database)
-When scaffolding, have to drop/recreate database to reflect changes since we aren't using migrations
+Scaffolded Blogs, Comments, Posts and Tags
+	When scaffolding, have to drop/recreate database to reflect changes since we aren't using migrations
+Changed the Areas/Identity/Pages/Account/Index to use the custom Identity model
+	Be careful with identity updates since it pulls from usermanager not the dbcontext

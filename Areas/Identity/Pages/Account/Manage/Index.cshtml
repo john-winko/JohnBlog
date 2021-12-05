@@ -12,24 +12,59 @@
         <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
-                <input asp-for="Username" class="form-control" disabled/>
+                <input type="email" asp-for="Username" class="form-control" disabled/>
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.PhoneNumber" class="form-control"/>
+                <input type="tel" asp-for="Input.PhoneNumber" class="form-control"/>
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-floating">
-                <input asp-for="Input.Image" class="form-control"/>
-                <label asp-for="Input.Image" class="form-label">Select Image</label>
-                <span asp-validation-for="Input.Image" class="text-danger"></span>
+                <input type="text" asp-for="Input.FirstName" class="form-control"/>
+                <label asp-for="Input.FirstName" class="form-label"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="text" asp-for="Input.LastName" class="form-control"/>
+                <label asp-for="Input.LastName" class="form-label"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="text" asp-for="Input.Title" class="form-control"/>
+                <label asp-for="Input.Title" class="form-label"></label>
+                <span asp-validation-for="Input.Title" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="text" asp-for="Input.Blurb" class="form-control"/>
+                <label asp-for="Input.Blurb" class="form-label"></label>
+                <span asp-validation-for="Input.Blurb" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="file" asp-for="FormFile" class="form-control"/>
+                <label asp-for="FormFile" class="form-label">Select Image</label>
+                <span asp-validation-for="FormFile" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="url" asp-for="Input.FacebookUrl" class="form-control"value="https://www.facebook.com/"/>
+                <label asp-for="Input.FacebookUrl" class="form-label">Facebook URL</label>
+                <span asp-validation-for="Input.FacebookUrl" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="url" asp-for="Input.TwitterUrl" class="form-control" value="https://www.twitter.com/"/>
+                <label asp-for="Input.TwitterUrl" class="form-label">Twitter URL</label>
+                <span asp-validation-for="Input.TwitterUrl" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input type="url" asp-for="Input.LinkedInUrl" class="form-control" value="https://www.linkedin.com/"/>
+                <label asp-for="Input.LinkedInUrl" class="form-label">LinkedIn URL</label>
+                <span asp-validation-for="Input.LinkedInUrl" class="text-danger"></span>
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
     <div class="col-md-6">
-        <img src="@Model.UserImage" class="img-fluid rounded-circle" alt=""/>
+        <img src="@Model.Input.BlogImage.GetImage" class="img-fluid rounded-circle" alt=""/>
     </div>
 </div>
 
