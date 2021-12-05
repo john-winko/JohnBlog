@@ -12,7 +12,10 @@ namespace JohnBlog.Data
             
         }
 
+        // Have to make nullable to get rid of yellow ramen... should this be handled elsewhere?
         public DbSet<Blog>? Blogs { get; set; }
-        //public DbSet<BlogImage>? BlogImages { get; set; }
+        public DbSet<Post>? Posts { get; set; }
+        public DbSet<Tag>? Tags { get; set; }
+        public DbSet<Comment>? Comments { get; set; }
     }
 }
