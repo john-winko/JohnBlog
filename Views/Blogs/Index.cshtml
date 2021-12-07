@@ -31,7 +31,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+
+    @foreach (var item in Model!) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -46,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.Updated)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BlogUser.Id)
+                @Html.DisplayFor(modelItem => item.BlogUser!.Email)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
