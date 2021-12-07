@@ -3,6 +3,7 @@
     public enum BlogRole
     {
         Administrator,
+        Author,
         Moderator,
         Viewer,
         Guest
