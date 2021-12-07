@@ -9,8 +9,10 @@
 
 </head>
 <body>
+
+
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 row">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
 
         <div class="container-fluid ">
 
@@ -18,22 +20,28 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav justify-content-center flex-grow-1">
+            <div class="navbar-collapse collapse d-sm-inline-flex row">
+                <ul class="navbar-nav col-md-3 col-12 ps-3">
                     <li>
                         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                             <img class="img-fluid" style="max-height: 20px;" src="JW_Logo.svg" alt=""/>
                         </a>
                     </li>
+                </ul>
+                <ul class="navbar-nav justify-content-center col-md-6 col-12">
+
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Blogs" asp-action="Index">Blogs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Blogs" asp-action="Index">Authors</a>
                     </li>
                     <li>
                         <form class="d-flex">
-                            <!-- Change to magnifying glass image inside of the search box right aligned -->
+                            <!-- TODO: Change to magnifying glass image inside of the search box right aligned -->
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
@@ -47,41 +55,48 @@
 
     </nav>
 </header>
+
 <div class="container">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
 </div>
-<footer class="bg-primary text-white text-center text-lg-start fixed-bottom">
-       <!-- Section: Social media -->
-       <section class="d-flex justify-content-center p-1">
 
-           <div class="me-5 d-none d-lg-block">
-               <span>Get connected with us on social networks:</span>
-           </div>
-           <div>
-               <a href="" class="me-4 text-reset">Facebook
-                   <i class="fab fa-facebook-f"></i>
-               </a>
-               <a href="" class="me-4 text-reset">Twitter
-                   <i class="fab fa-twitter"></i>
-               </a>
-               <a href="" class="me-4 text-reset">LinkedIn
-                   <i class="fab fa-linkedin"></i>
-               </a>
-               <a href="" class="me-4 text-reset">GitHub
-                   <i class="fab fa-github"></i>
-               </a>
-           </div>
-        
-       </section>
-       <section class="d-flex justify-content-center border-bottom">
-           <span>
-               © 2021 Copyright: <a class="text-reset fw-bold" href="https://www.johnwinko.com/">JohnWinko.com</a>
-           </span>
-       </section>
+<footer class="bg-primary text-white text-center text-lg-start fixed-bottom">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center p-1">
+
+        <div class="me-5 d-none d-lg-block">
+            <span>Get connected with us on social networks:</span>
+        </div>
+        <div>
+            <a href="" class="me-4 text-reset">
+                Facebook
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                Twitter
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                LinkedIn
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                GitHub
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+
+    </section>
+    <section class="d-flex justify-content-center border-bottom">
+        <span>
+            © 2021 Copyright: <a class="text-reset fw-bold" href="https://www.johnwinko.com/">JohnWinko.com</a>
+        </span>
+    </section>
 
 </footer>
+
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

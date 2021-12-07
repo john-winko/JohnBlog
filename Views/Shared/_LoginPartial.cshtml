@@ -2,7 +2,7 @@
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> UserManager
 
-<ul class="navbar-nav">
+<ul class="col-md-3 col-12 navbar-nav justify-content-end pe-3">
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
