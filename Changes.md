@@ -71,4 +71,6 @@ Updating Blogs.Create
 	Added Bindproperty to blogimage
 	Suppressing nullable warnings with !
 Updated Blogs.Index to use cards instead of table
+Updated Blogs.Edit
+Deleted Blogs.Details (previous references direct to Posts.Index which will be revised later)
 

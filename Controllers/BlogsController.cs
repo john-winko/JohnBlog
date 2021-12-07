@@ -30,25 +30,6 @@ namespace JohnBlog.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Blogs/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var blog = await _context.Blogs!
-                .Include(b => b.BlogUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (blog == null)
-            {
-                return NotFound();
-            }
-
-            return View(blog);
-        }
-
         // GET: Blogs/Create
         [Authorize(Roles = $"{nameof(BlogRole.Administrator)},{nameof(BlogRole.Author)}")]
         public IActionResult Create()
