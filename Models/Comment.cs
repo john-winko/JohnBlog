@@ -16,7 +16,10 @@ namespace JohnBlog.Models
         [Display(Name ="Comment")]
         public string? CommentText { get; set; }
 
+        [Column(TypeName = "timestamp without time zone")]
         public DateTime Created { get; set; }
+        
+        [Column(TypeName = "timestamp without time zone")]
         public DateTime Updated { get; set; }
 
         [NotMapped]

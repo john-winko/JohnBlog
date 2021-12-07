@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JohnBlog.Models
 {
@@ -16,15 +17,16 @@ namespace JohnBlog.Models
         [StringLength(100, ErrorMessage = "The {0} must be between {1} and {2} characters long.", MinimumLength = 2)]
         public string Description { get; set; } = string.Empty;
 
-        [DataType(DataType.Date)]
+        [Column(TypeName = "timestamp without time zone")]
         [Display(Name = "Created Date")]
         public DateTime Created { get; set; }
 
-        [DataType(DataType.Date)]
+        [Column(TypeName = "timestamp without time zone")]
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
-        public BlogImage? BlogImage { get; set; }
+        [BindProperty]
+        public BlogImage BlogImage { get; set; } = new();
 
         [Display(Name = "Author")]
         public virtual BlogUser? BlogUser { get; set; } 

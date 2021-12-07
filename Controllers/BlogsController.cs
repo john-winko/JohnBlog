@@ -8,17 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using JohnBlog.Data;
 using JohnBlog.Enums;
 using JohnBlog.Models;
+using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace JohnBlog.Controllers
 {
     public class BlogsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BlogUser> _userManager;
+        private readonly IImageService _imageService;
 
-        public BlogsController(ApplicationDbContext context)
+        public BlogsController(ApplicationDbContext context, UserManager<BlogUser> userManager, IImageService imageService)
         {
             _context = context;
+            _userManager = userManager;
+            _imageService = imageService;
         }
 
         // GET: Blogs
@@ -51,7 +57,7 @@ namespace JohnBlog.Controllers
         [Authorize(Roles = $"{nameof(BlogRole.Administrator)},{nameof(BlogRole.Author)}")]
         public IActionResult Create()
         {
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
+            //ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -60,10 +66,19 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogUserId,Name,Description,Created,Updated")] Blog blog)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,BlogImage")] Blog blog)
         {
             if (ModelState.IsValid)
             {
+                blog.BlogUserId = _userManager.GetUserId(User);
+                blog.Created = DateTime.Now;
+                if (blog.BlogImage.FormFile is not null)
+                {
+                    blog.BlogImage.ContentType = _imageService.ContentType(blog.BlogImage.FormFile);
+                    blog.BlogImage.ImageData = await _imageService.EncodeImageAsync(blog.BlogImage.FormFile);
+                }
+                
+                
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
