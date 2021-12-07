@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JohnBlog.Data;
+using JohnBlog.Enums;
 using JohnBlog.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JohnBlog.Controllers
 {
@@ -46,6 +48,7 @@ namespace JohnBlog.Controllers
         }
 
         // GET: Blogs/Create
+        [Authorize(Roles = $"{nameof(BlogRole.Administrator)},{nameof(BlogRole.Author)}")]
         public IActionResult Create()
         {
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");

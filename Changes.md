@@ -62,3 +62,6 @@ Scaffolded Blogs, Comments, Posts and Tags
 	When scaffolding, have to drop/recreate database to reflect changes since we aren't using migrations
 Changed the Areas/Identity/Pages/Account/Index to use the custom Identity model
 	Be careful with identity updates since it pulls from usermanager not the dbcontext
+Revised landing page (_layout and index)
+Added authorization to Blogs.Create for admins/authors
+	Added Author BlogRole enum 
