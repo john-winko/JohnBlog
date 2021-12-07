@@ -13,6 +13,31 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+nav.navbar {
+  background-color: #82c7da;
+}
+nav li {
+  margin-right: 1em;
+}
+nav.navbar a.nav-link:hover{
+  font-weight: bolder;
+  color: #ff0059; /* TODO: not working selection not specific enough */
+}
+.btn-outline-2 {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding-bottom: 2px;
+  color: #ff7d6b;
+}
+
+.btn-outline-2:hover {
+  color: #ffffff;
+  border: 2px solid #ff7d6b;
+  background-color: #ff7d6b;
+}
+
+.btn-large {
+  padding: 0 30px;
+  height: 60px;
+  line-height: 60px;
 }
