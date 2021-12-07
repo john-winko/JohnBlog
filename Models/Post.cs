@@ -1,5 +1,6 @@
 ﻿using JohnBlog.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JohnBlog.Models
 {
@@ -23,11 +24,11 @@ namespace JohnBlog.Models
         [Required]
         public string? Content { get; set; }
 
-        [DataType(DataType.Date)]
+        [Column(TypeName = "timestamp without time zone")]
         [Display(Name = "Created Date")]
         public DateTime Created { get; set; }
 
-        [DataType(DataType.Date)]
+        [Column(TypeName = "timestamp without time zone")]
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
 
@@ -35,7 +36,7 @@ namespace JohnBlog.Models
 
         public string? Slug { get; set; }
 
-        public BlogImage? BlogImage { get; set; }
+        public string? BlogImage { get; set; }
 
         // Navigation properties
         public virtual Blog? Blog { get; set; }
