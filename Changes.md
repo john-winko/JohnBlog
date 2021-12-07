@@ -69,4 +69,5 @@ Updating Blog.Create
 		Added Author BlogRole enum
 	Captured bloguserid from currently logged in user / removed field from view form
 	Added Bindproperty to blogimage
+	Suppressing nullable warnings with !
 
