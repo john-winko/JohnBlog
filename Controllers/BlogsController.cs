@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +26,7 @@ namespace JohnBlog.Controllers
         // GET: Blogs
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Blogs.Include(b => b.BlogUser);
+            var applicationDbContext = _context.Blogs!.Include(b => b.BlogUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -42,7 +38,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blogs
+            var blog = await _context.Blogs!
                 .Include(b => b.BlogUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (blog == null)
@@ -88,6 +84,7 @@ namespace JohnBlog.Controllers
         }
 
         // GET: Blogs/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -95,7 +92,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blogs.FindAsync(id);
+            var blog = await _context.Blogs!.FindAsync(id);
             if (blog == null)
             {
                 return NotFound();
@@ -109,35 +106,32 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogUserId,Name,Description,Created,Updated")] Blog blog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogUserId,Name,Description,Created,BlogImage")] Blog blog)
         {
-            if (id != blog.Id)
-            {
-                return NotFound();
-            }
+            if (id != blog.Id) return NotFound();
+            if (!ModelState.IsValid) return View(blog);
 
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (blog.BlogImage.FormFile is not null)
                 {
-                    _context.Update(blog);
-                    await _context.SaveChangesAsync();
+                    blog.BlogImage.ContentType = _imageService.ContentType(blog.BlogImage.FormFile);
+                    blog.BlogImage.ImageData = await _imageService.EncodeImageAsync(blog.BlogImage.FormFile);
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BlogExists(blog.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                blog.Updated = DateTime.Now;
+                    
+                _context.Update(blog);
+                await _context.SaveChangesAsync();
             }
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", blog.BlogUserId);
-            return View(blog);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BlogExists(blog.Id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Blogs/Delete/5
@@ -148,7 +142,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var blog = await _context.Blogs
+            var blog = await _context.Blogs!
                 .Include(b => b.BlogUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (blog == null)
@@ -164,15 +158,15 @@ namespace JohnBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var blog = await _context.Blogs.FindAsync(id);
-            _context.Blogs.Remove(blog);
+            var blog = await _context.Blogs!.FindAsync(id);
+            _context.Blogs.Remove(blog!);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BlogExists(int id)
         {
-            return _context.Blogs.Any(e => e.Id == id);
+            return _context.Blogs!.Any(e => e.Id == id);
         }
     }
 }
