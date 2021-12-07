@@ -21,6 +21,7 @@ namespace JohnBlog.Services
 
         public async Task SeedDatabaseAsync()
         {
+            // TODO: check if schema is correct, drop/add and populate from a csv if not
             await dbContext.Database.EnsureCreatedAsync();
             await SeedRolesAsync();
             await SeedUsersAsync();

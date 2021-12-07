@@ -11,6 +11,7 @@ public class BasicImageService : IImageService
 
     public string? DecodeImage(byte[]? data, string? type)
     {
+        // TODO: refactor to just use the string as the database column and cut out the middle man
         if (data is null || type is null) return null; // guard statement
         return $"data:image/{type};base64,{Convert.ToBase64String(data)}";
     }
