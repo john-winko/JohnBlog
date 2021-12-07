@@ -14,7 +14,7 @@ namespace JohnBlog.Models
         public string Name { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be between {1} and {2} characters long.", MinimumLength = 2)]
+        [StringLength(300, ErrorMessage = "The {0} must be between {1} and {2} characters long.", MinimumLength = 2)]
         public string Description { get; set; } = string.Empty;
 
         [Column(TypeName = "timestamp without time zone")]

@@ -63,11 +63,12 @@ Scaffolded Blogs, Comments, Posts and Tags
 Changed the Areas/Identity/Pages/Account/Index to use the custom Identity model
 	Be careful with identity updates since it pulls from usermanager not the dbcontext
 Revised landing page (_layout and index) 
-Updating Blog.Create
+Updating Blogs.Create
 	injected usermanager and imageservice for later use
 	Added authorization for admins/authors
 		Added Author BlogRole enum
 	Captured bloguserid from currently logged in user / removed field from view form
 	Added Bindproperty to blogimage
 	Suppressing nullable warnings with !
+Updated Blogs.Index to use cards instead of table
 
