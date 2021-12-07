@@ -16,3 +16,14 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+nav.navbar {
+  background-color: #82c7da;
+}
+nav li {
+  margin-right: 1em;
+}
+nav.navbar a.nav-link:hover{
+  font-weight: bolder;
+  color: #ff0059; /* TODO: not working */
+}
