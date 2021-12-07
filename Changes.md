@@ -73,4 +73,5 @@ Updating Blogs.Create
 Updated Blogs.Index to use cards instead of table
 Updated Blogs.Edit
 Deleted Blogs.Details (previous references direct to Posts.Index which will be revised later)
+Refactored out using an image service... used an extension method instead for simplicity. Deleted all associated fluff to support the old image service.
 

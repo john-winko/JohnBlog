@@ -22,7 +22,7 @@ namespace JohnBlog.Models
         [StringLength(200, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
         [Display(Name = "Blurb")]
         public string? Blurb { get; set; }
-        public BlogImage BlogImage { get; set; } = new();
+        public string? BlogImage { get; set; } 
 
         // TODO: change to list of URLs/URLType and update views accordingly
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using JohnBlog.Data;
 using JohnBlog.Enums;
 using JohnBlog.Models;
-using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,13 +13,12 @@ namespace JohnBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
-        private readonly IImageService _imageService;
+       
 
-        public BlogsController(ApplicationDbContext context, UserManager<BlogUser> userManager, IImageService imageService)
+        public BlogsController(ApplicationDbContext context, UserManager<BlogUser> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _imageService = imageService;
         }
 
         // GET: Blogs
@@ -34,7 +32,6 @@ namespace JohnBlog.Controllers
         [Authorize(Roles = $"{nameof(BlogRole.Administrator)},{nameof(BlogRole.Author)}")]
         public IActionResult Create()
         {
-            //ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -43,18 +40,13 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,BlogImage")] Blog blog)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,BlogImage")] Blog blog, IFormFile? formFile)
         {
             if (ModelState.IsValid)
             {
                 blog.BlogUserId = _userManager.GetUserId(User);
                 blog.Created = DateTime.Now;
-                if (blog.BlogImage.FormFile is not null)
-                {
-                    blog.BlogImage.ContentType = _imageService.ContentType(blog.BlogImage.FormFile);
-                    blog.BlogImage.ImageData = await _imageService.EncodeImageAsync(blog.BlogImage.FormFile);
-                }
-                
+                blog.BlogImage = await formFile.ToDbString() ?? blog.BlogImage;
                 
                 _context.Add(blog);
                 await _context.SaveChangesAsync();
@@ -87,18 +79,14 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogUserId,Name,Description,Created,BlogImage")] Blog blog)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogUserId,Name,Description,Created,BlogImage")] Blog blog, IFormFile formFile)
         {
             if (id != blog.Id) return NotFound();
             if (!ModelState.IsValid) return View(blog);
 
             try
             {
-                if (blog.BlogImage.FormFile is not null)
-                {
-                    blog.BlogImage.ContentType = _imageService.ContentType(blog.BlogImage.FormFile);
-                    blog.BlogImage.ImageData = await _imageService.EncodeImageAsync(blog.BlogImage.FormFile);
-                }
+                blog.BlogImage = await formFile.ToDbString() ?? blog.BlogImage;
                 blog.Updated = DateTime.Now;
                     
                 _context.Update(blog);

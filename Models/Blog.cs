@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JohnBlog.Models
@@ -24,9 +23,8 @@ namespace JohnBlog.Models
         [Column(TypeName = "timestamp without time zone")]
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
-
-        [BindProperty]
-        public BlogImage BlogImage { get; set; } = new();
+        
+        public string? BlogImage { get; set; } 
 
         [Display(Name = "Author")]
         public virtual BlogUser? BlogUser { get; set; } 

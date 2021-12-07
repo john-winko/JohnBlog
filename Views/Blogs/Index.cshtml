@@ -1,6 +1,4 @@
-@using JohnBlog.Services
 @model IEnumerable<JohnBlog.Models.Blog>
-@inject IImageService _imageService
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +14,7 @@
             <div class="card h-100">
                 @* TODO: enclosing div within an anchor tag makes text inherit hyperlink properties... must use a z-index workaround to look nice *@
                 @* <a style="text-decoration: none;" asp-action="Details" asp-route-id="@item.Id"> *@
-                <img src="@_imageService.DecodeImage(item.BlogImage.ImageData, item.BlogImage.ContentType)" alt="" class="card-img-top " style="object-fit: contain;max-height: 250px;min-height: 250px;"/>
+                <img src="@item.BlogImage" alt="" class="card-img-top " style="object-fit: contain;max-height: 250px;min-height: 250px;"/>
                 <div class="card-body">
                     <h5 class="display-5 card-title d-flex justify-content-center">@item.Name</h5>
                     <p class="card-text">@item.Description</p>
