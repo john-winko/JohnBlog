@@ -2,12 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using JohnBlog.Models;
-using JohnBlog.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -18,16 +13,13 @@ namespace JohnBlog.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<BlogUser> _userManager;
         private readonly SignInManager<BlogUser> _signInManager;
-        private readonly IImageService _imageService;
 
         public IndexModel(
             UserManager<BlogUser> userManager,
-            SignInManager<BlogUser> signInManager, 
-            IImageService imageService)
+            SignInManager<BlogUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _imageService = imageService;
         }
 
         /// <summary>
@@ -90,10 +82,7 @@ namespace JohnBlog.Areas.Identity.Pages.Account.Manage
 
             // Only over write if not null
             user.PhoneNumber = Input.PhoneNumber ?? user.PhoneNumber;
-            // TODO update image service to return a BlogImage type to save
-            user.BlogImage.ImageData = await _imageService.EncodeImageAsync(FormFile) ?? user.BlogImage.ImageData;
-            user.BlogImage.ContentType = _imageService.ContentType(FormFile) ?? user.BlogImage.ContentType;
-
+            user.BlogImage = await FormFile.ToDbString() ?? user.BlogImage;
             user.FirstName = Input.FirstName;
             user.LastName = Input.LastName;
             user.Title = Input.Title;

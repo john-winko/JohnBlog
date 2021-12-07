@@ -36,7 +36,7 @@ namespace JohnBlog.Models
 
         public string? Slug { get; set; }
 
-        public BlogImage? BlogImage { get; set; }
+        public string? BlogImage { get; set; }
 
         // Navigation properties
         public virtual Blog? Blog { get; set; }

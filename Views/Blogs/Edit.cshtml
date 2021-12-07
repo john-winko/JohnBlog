@@ -1,6 +1,5 @@
-@using JohnBlog.Services
 @model JohnBlog.Models.Blog
-@inject IImageService _imageService
+
 
 @{
     ViewData["Title"] = "Edit";
@@ -33,9 +32,9 @@
                 <span asp-validation-for="Created" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BlogImage.FormFile" class="control-label"></label>
-                <input type="file" asp-for="BlogImage.FormFile" class="form-control" />
-                <span asp-validation-for="BlogImage.FormFile" class="text-danger"></span>
+                <label asp-for="BlogImage" class="control-label"></label>
+                <input type="file" asp-for="BlogImage" name="FormFile" class="form-control" />
+                <span asp-validation-for="BlogImage" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -44,7 +43,7 @@
         </form>
     </div>
     <div class="col-md-4">
-        <img src="@_imageService.DecodeImage(Model!.BlogImage.ImageData, Model.BlogImage.ContentType)" alt="" style="max-width: 400px;"/>
+        <img src="@Model!.BlogImage" alt="" style="max-width: 400px;"/>
     </div>
 </div>
 
