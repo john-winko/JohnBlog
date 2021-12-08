@@ -1,0 +1,31 @@
+﻿{
+  "Users": [
+    {
+      "Email": "john.winko@gmail.com",
+      "UserName": "john.winko@gmail.com",
+      "FirstName": "John",
+      "LastName": "Winko",
+      "PhoneNumber": "(904) 703-4856",
+      "EmailConfirmed": true,
+      "Password" : "Abc&123!",
+      "Roles" : ["Administrator"]
+    },
+    {
+      "Email": "eternal81@msn.com",
+      "UserName": "eternal81@msn.com",
+      "FirstName": "John",
+      "LastName": "Winko",
+      "PhoneNumber": "(904) 703-4856",
+      "EmailConfirmed": true,
+      "Password" : "Abc&123!",
+      "Roles" : ["Moderator"]
+    }
+  ],
+  "Blogs": [
+    {
+      "Name" : "Blog 1"
+    },{
+      "Name" : "Blog 1"
+    }
+  ]
+}
