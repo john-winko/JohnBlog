@@ -22,6 +22,7 @@ namespace JohnBlog.Services
         public async Task SeedDatabaseAsync()
         {
             // TODO: check if schema is correct, drop/add and populate from a csv if not
+            
             await dbContext.Database.EnsureCreatedAsync();
             await SeedRolesAsync();
             await SeedUsersAsync();
@@ -39,31 +40,37 @@ namespace JohnBlog.Services
 
         private async Task SeedUsersAsync()
         {
-            if (dbContext.Users.Any()) return;
+            // Seeding more programmatically since these changes use UserManager to affect changes
+            // rather than simply dbcontext (would have to load all 7 of the asp net tables)
 
-            var adminUser = new BlogUser()
+            var config = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("Data/Seed.json")
+                .Build()
+                .GetSection("Users")
+                .Get<List<BlogUserSeed>>();
+            
+            var missingUsers = config
+                .Where(blogUserSeed => !userManager.Users
+                    .Any(p => p.Email == blogUserSeed.Email));
+            
+            foreach (var blogUserSeed in missingUsers)
             {
-                Email = "john.winko@gmail.com",
-                UserName = "john.winko@gmail.com",                
-                FirstName = "John",
-                LastName = "Winko",
-                PhoneNumber = "(904) 703-4856",
-                EmailConfirmed = true
-            };
-            await userManager.CreateAsync(adminUser, "Abc&123!");
-            await userManager.AddToRoleAsync(adminUser, BlogRole.Administrator.ToString());
-
-            var moderatorUser = new BlogUser()
-            {
-                Email = "eternal81@msn.com",
-                UserName = "eternal81@msn.com",
-                FirstName = "John",
-                LastName = "Winko",
-                PhoneNumber = "(904) 703-4856",
-                EmailConfirmed = true
-            };           
-            await userManager.CreateAsync(moderatorUser, "Abc&123!");
-            await userManager.AddToRoleAsync(moderatorUser, BlogRole.Moderator.ToString());
+                // explicit conversion for usermanager
+                BlogUser toAdd = blogUserSeed;
+                await userManager.CreateAsync(toAdd, blogUserSeed.Password);
+                foreach (var blogRole in blogUserSeed.Roles)
+                {
+                    await userManager.AddToRoleAsync(toAdd, blogRole.ToString());
+                }
+            }
         }
+    }
+    
+    // BlogUser doesn't match 1:1 to what is needed to seed Asp.Net users
+    public class BlogUserSeed : BlogUser
+    {
+        public List<BlogRole> Roles { get; set; } = new();
+        public string? Password { get; set; }
     }
 }
