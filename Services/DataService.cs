@@ -90,8 +90,13 @@ namespace JohnBlog.Services
         }
     }
     
-    public abstract class TestConverter : DefaultTypeConverter
+    public class TestConverter : DefaultTypeConverter
     {
+        public static TestConverter CreateInstance()
+        {
+            return new TestConverter();
+        }
+
         public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
         {
             return text.ToLower() switch

@@ -24,8 +24,13 @@ namespace JohnBlog.Models
         [Display(Name = "Updated Date")]
         public DateTime? Updated { get; set; }
         
+        [Display(Name = "Blog Image")]
         public string? BlogImage { get; set; } 
 
+        // TODO: Implement NewImage as a binding rather than using return fields
+        // [NotMapped]
+        // public IFormFile? NewImage { get; set; }
+        
         [Display(Name = "Author")]
         public virtual BlogUser? BlogUser { get; set; } 
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
