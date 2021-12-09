@@ -33,9 +33,6 @@
 
   <ItemGroup>
     <None Remove="Data\test.csv" />
-    <Content Include="Data\test.csv">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>
