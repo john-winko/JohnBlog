@@ -1,4 +1,8 @@
-﻿using JohnBlog.Data;
+﻿using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
+using JohnBlog.Data;
 using JohnBlog.Enums;
 using JohnBlog.Models;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +30,21 @@ namespace JohnBlog.Services
             await dbContext.Database.EnsureCreatedAsync();
             await SeedRolesAsync();
             await SeedUsersAsync();
+            
+            var csv = new CsvReader(
+                new StreamReader("D:/temp/AspNetUsers.csv"), CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<AspNetUsersMap>();
+            var records = csv.GetRecords<BlogUser>();
+            foreach (var bRecord in records)
+            {
+                // TODO: Current issue where it enters one ID correctly but the other incorrectly... double check mapping isn't getting borked with a required field
+                if (!dbContext.Users!.Any(p => p.Email == bRecord.Email))
+                {
+                    dbContext.Users!.Add(bRecord);
+                }
+            }
+
+            await dbContext.SaveChangesAsync();
         }
 
         private async Task SeedRolesAsync()
@@ -72,5 +91,48 @@ namespace JohnBlog.Services
     {
         public List<BlogRole> Roles { get; set; } = new();
         public string? Password { get; set; }
+    }
+
+    public sealed class BlogMap : ClassMap<Blog>
+    {
+        // ID's are auto generated so can't have proper FK relationships when seeding
+        public BlogMap()
+        {
+            Map(m => m.Id).Name("Id");
+            Map(m => m.BlogUserId).Name("BlogUserId");
+            Map(m => m.Name).Name("Name");
+            Map(m => m.Description).Name("Description");
+            Map(m => m.Created).Name("Created");
+            Map(m => m.Updated).Name("Updated");
+            Map(m => m.BlogImage).Name("BlogImage");
+        }
+    }
+    public sealed class AspNetUsersMap : ClassMap<BlogUser>
+    {
+        public AspNetUsersMap()
+        {
+            AutoMap(CultureInfo.InvariantCulture);
+            
+            Map(m => m.NormalizedEmail).Ignore();
+            Map(m => m.NormalizedUserName).Ignore();
+
+            Map(m => m.EmailConfirmed).Name("EmailConfirmed").TypeConverter<TestConverter>();
+            Map(m => m.PhoneNumberConfirmed).Name("PhoneNumberConfirmed").TypeConverter<TestConverter>();
+            Map(m => m.TwoFactorEnabled).Name("TwoFactorEnabled").TypeConverter<TestConverter>();
+            Map(m => m.LockoutEnabled).Name("LockoutEnabled").TypeConverter<TestConverter>();
+        }
+    }
+
+    public class TestConverter : DefaultTypeConverter
+    {
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        {
+            return text.ToLower() switch
+            {
+                "t" => true,
+                "f" => false,
+                _ => base.ConvertFromString(text, row, memberMapData)
+            };
+        }
     }
 }
