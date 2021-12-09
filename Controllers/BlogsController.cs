@@ -79,7 +79,7 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogUserId,Name,Description,Created,BlogImage")] Blog blog, IFormFile formFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogUserId,Name,Description,Created,BlogImage")] Blog blog, IFormFile? formFile)
         {
             if (id != blog.Id) return NotFound();
             if (!ModelState.IsValid) return View(blog);
