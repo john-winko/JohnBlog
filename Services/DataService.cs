@@ -29,19 +29,20 @@ namespace JohnBlog.Services
             // make sure our defaults exists
             // TODO: use generics for cleanup
             // TODO: save required .csv locally and change paths to relative location
-            
+
             var csv = new CsvReader(new StreamReader("D:/temp/AspNetUsers.csv"), CultureInfo.InvariantCulture);
             csv.Context.RegisterClassMap<AspNetUsersMap>();
-            
+
             foreach (var bRecord in csv.GetRecords<BlogUser>())
             {
                 if (!_dbContext.Users!.Any(p => p.Id == bRecord.Id))
                 {
                     _dbContext.Users!.Add(bRecord);
                 }
-                
             }
-            
+
+            await _dbContext.SaveChangesAsync();
+
             csv = new CsvReader(new StreamReader("D:/temp/AspNetRoles.csv"), CultureInfo.InvariantCulture);
             csv.Context.AutoMap<IdentityRole>();
             foreach (var bRecord in csv.GetRecords<IdentityRole>())
@@ -50,9 +51,10 @@ namespace JohnBlog.Services
                 {
                     _dbContext.Roles!.Add(bRecord);
                 }
-                
             }
-            
+
+            await _dbContext.SaveChangesAsync();
+
             csv = new CsvReader(new StreamReader("D:/temp/AspNetUserRoles.csv"), CultureInfo.InvariantCulture);
             csv.Context.AutoMap<IdentityUserRole<string>>();
             foreach (var bRecord in csv.GetRecords<IdentityUserRole<string>>())
@@ -62,21 +64,32 @@ namespace JohnBlog.Services
                     _dbContext.UserRoles!.Add(bRecord);
                 }
             }
- 
+
+            await _dbContext.SaveChangesAsync();
+
+            csv = new CsvReader(new StreamReader("D:/temp/Blogs.csv"), CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<BlogMap>();
+            foreach (var bRecord in csv.GetRecords<Blog>())
+            {
+                if (!_dbContext.Blogs!.Any(p => p.Id == bRecord.Id))
+                {
+                    _dbContext.Blogs!.Add(bRecord);
+                }
+            }
+
             await _dbContext.SaveChangesAsync();
         }
     }
-
-
+    
     public sealed class AspNetUsersMap : ClassMap<BlogUser>
     {
         private AspNetUsersMap()
         {
             AutoMap(CultureInfo.InvariantCulture);
-            
+
             // throwing error on nulls
-            Map(m => m.LockoutEnd).Name("LockoutEnd").Ignore(); 
-            
+            Map(m => m.LockoutEnd).Name("LockoutEnd").Ignore();
+
             // cvs storing t/f instead of recognized boolean value
             Map(m => m.EmailConfirmed).Name("EmailConfirmed").TypeConverter<TestConverter>();
             Map(m => m.PhoneNumberConfirmed).Name("PhoneNumberConfirmed").TypeConverter<TestConverter>();
@@ -89,7 +102,26 @@ namespace JohnBlog.Services
             return new AspNetUsersMap();
         }
     }
-    
+
+    public sealed class BlogMap : ClassMap<Blog>
+    {
+        private BlogMap()
+        {
+            Map(m => m.Id).Name("Id");
+            Map(m => m.BlogUserId).Name("BlogUserId");
+            Map(m => m.Name).Name("Name");
+            Map(m => m.Description).Name("Description");
+            Map(m => m.Created).Name("Created");
+            Map(m => m.Updated).Name("Updated").Ignore(); //possible null date
+            Map(m => m.BlogImage).Name("BlogImage");
+        }
+
+        internal static BlogMap CreateInstance()
+        {
+            return new BlogMap();
+        }
+    }
+
     public class TestConverter : DefaultTypeConverter
     {
         public static TestConverter CreateInstance()
