@@ -1,69 +1,144 @@
-﻿using JohnBlog.Data;
-using JohnBlog.Enums;
+﻿using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
+using JohnBlog.Data;
 using JohnBlog.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace JohnBlog.Services
 {
-    // TODO: use a json file to populate users, example posts etc
     public class DataService
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly UserManager<BlogUser> userManager;
+        private readonly ApplicationDbContext _dbContext;
 
-        public DataService(RoleManager<IdentityRole> roleManager, UserManager<BlogUser> userManager, ApplicationDbContext dbContext)
+        public DataService(ApplicationDbContext dbContext)
         {
-            this.roleManager = roleManager;
-            this.userManager = userManager;
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public async Task SeedDatabaseAsync()
         {
-            // TODO: check if schema is correct, drop/add and populate from a csv if not
-            await dbContext.Database.EnsureCreatedAsync();
-            await SeedRolesAsync();
-            await SeedUsersAsync();
+            //await _dbContext.Database.EnsureDeletedAsync();
+            await _dbContext.Database.EnsureCreatedAsync();
+            await SeedDatabaseDefaultAsync();
         }
 
-        private async Task SeedRolesAsync()
+        private async Task SeedDatabaseDefaultAsync()
         {
-            if (dbContext.Roles.Any()) return;
+            // make sure our defaults exists
+            // TODO: use generics for cleanup
+            // TODO: save required .csv locally and change paths to relative location
 
-            foreach (var role in Enum.GetNames(typeof(BlogRole)))
+            var csv = new CsvReader(new StreamReader("D:/temp/AspNetUsers.csv"), CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<AspNetUsersMap>();
+
+            foreach (var bRecord in csv.GetRecords<BlogUser>())
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                if (!_dbContext.Users!.Any(p => p.Id == bRecord.Id))
+                {
+                    _dbContext.Users!.Add(bRecord);
+                }
             }
+
+            await _dbContext.SaveChangesAsync();
+
+            csv = new CsvReader(new StreamReader("D:/temp/AspNetRoles.csv"), CultureInfo.InvariantCulture);
+            csv.Context.AutoMap<IdentityRole>();
+            foreach (var bRecord in csv.GetRecords<IdentityRole>())
+            {
+                if (!_dbContext.Roles!.Any(p => p.Id == bRecord.Id))
+                {
+                    _dbContext.Roles!.Add(bRecord);
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            csv = new CsvReader(new StreamReader("D:/temp/AspNetUserRoles.csv"), CultureInfo.InvariantCulture);
+            csv.Context.AutoMap<IdentityUserRole<string>>();
+            foreach (var bRecord in csv.GetRecords<IdentityUserRole<string>>())
+            {
+                if (!_dbContext.UserRoles!.Any(p => p.UserId == bRecord.UserId))
+                {
+                    _dbContext.UserRoles!.Add(bRecord);
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            csv = new CsvReader(new StreamReader("D:/temp/Blogs.csv"), CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<BlogMap>();
+            foreach (var bRecord in csv.GetRecords<Blog>())
+            {
+                if (!_dbContext.Blogs!.Any(p => p.Id == bRecord.Id))
+                {
+                    _dbContext.Blogs!.Add(bRecord);
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+    }
+    
+    public sealed class AspNetUsersMap : ClassMap<BlogUser>
+    {
+        private AspNetUsersMap()
+        {
+            AutoMap(CultureInfo.InvariantCulture);
+
+            // throwing error on nulls
+            Map(m => m.LockoutEnd).Name("LockoutEnd").Ignore();
+
+            // cvs storing t/f instead of recognized boolean value
+            Map(m => m.EmailConfirmed).Name("EmailConfirmed").TypeConverter<TestConverter>();
+            Map(m => m.PhoneNumberConfirmed).Name("PhoneNumberConfirmed").TypeConverter<TestConverter>();
+            Map(m => m.TwoFactorEnabled).Name("TwoFactorEnabled").TypeConverter<TestConverter>();
+            Map(m => m.LockoutEnabled).Name("LockoutEnabled").TypeConverter<TestConverter>();
         }
 
-        private async Task SeedUsersAsync()
+        internal static AspNetUsersMap CreateInstance()
         {
-            if (dbContext.Users.Any()) return;
+            return new AspNetUsersMap();
+        }
+    }
 
-            var adminUser = new BlogUser()
+    public sealed class BlogMap : ClassMap<Blog>
+    {
+        private BlogMap()
+        {
+            Map(m => m.Id).Name("Id");
+            Map(m => m.BlogUserId).Name("BlogUserId");
+            Map(m => m.Name).Name("Name");
+            Map(m => m.Description).Name("Description");
+            Map(m => m.Created).Name("Created");
+            Map(m => m.Updated).Name("Updated").Ignore(); //possible null date
+            Map(m => m.BlogImage).Name("BlogImage");
+        }
+
+        internal static BlogMap CreateInstance()
+        {
+            return new BlogMap();
+        }
+    }
+
+    public class TestConverter : DefaultTypeConverter
+    {
+        public static TestConverter CreateInstance()
+        {
+            return new TestConverter();
+        }
+
+        public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
+        {
+            return text.ToLower() switch
             {
-                Email = "john.winko@gmail.com",
-                UserName = "john.winko@gmail.com",                
-                FirstName = "John",
-                LastName = "Winko",
-                PhoneNumber = "(904) 703-4856",
-                EmailConfirmed = true
+                "t" => true,
+                "true" => true,
+                "f" => false,
+                "false" => false,
+                _ => base.ConvertFromString(text, row, memberMapData)
             };
-            await userManager.CreateAsync(adminUser, "Abc&123!");
-            await userManager.AddToRoleAsync(adminUser, BlogRole.Administrator.ToString());
-
-            var moderatorUser = new BlogUser()
-            {
-                Email = "eternal81@msn.com",
-                UserName = "eternal81@msn.com",
-                FirstName = "John",
-                LastName = "Winko",
-                PhoneNumber = "(904) 703-4856",
-                EmailConfirmed = true
-            };           
-            await userManager.CreateAsync(moderatorUser, "Abc&123!");
-            await userManager.AddToRoleAsync(moderatorUser, BlogRole.Moderator.ToString());
         }
     }
 }
