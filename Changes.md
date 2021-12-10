@@ -74,4 +74,11 @@ Updated Blogs.Index to use cards instead of table
 Updated Blogs.Edit
 Deleted Blogs.Details (previous references direct to Posts.Index which will be revised later)
 Refactored out using an image service... used an extension method instead for simplicity. Deleted all associated fluff to support the old image service.
+Seeded database users with a json file
+Changed to seeding database with .csv files
+	Must seed in the correct order
+	Have to create typeconverters for bool fields in database
+	Must ignore null date fields (TODO for later see if there is an elegant work around)
+	Must save each table seed to database before seeding the next to ensure FK compliance
+Edited visuals for Blog.Index and had to remove Asp-For when sending formfield as a parameter (was invalidating model when null)
 
