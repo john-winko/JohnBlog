@@ -14,7 +14,8 @@
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-
+            <input type="hidden" asp-for="BlogImage" />
+            
             @Html.Hidden("BlogUserId", Model!.BlogUserId)
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -33,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="BlogImage" class="control-label"></label>
-                <input type="file" asp-for="BlogImage" name="FormFile" class="form-control" />
+                <input type="file" name="FormFile" class="form-control" />
                 <span asp-validation-for="BlogImage" class="text-danger"></span>
             </div>
             <div class="form-group">
