@@ -88,5 +88,13 @@ Post.Create
 	Removed calculated fields on view
 	Populated readystatus from enum on view
 	Must make BlogUserId nullable since we save it programmatically (TODO for later refactor to AuthorId)
-
+	
+*******************************************************************************
+TODO:
+*******************************************************************************
+Make a post index by blogid filter
+Add a slug service and implement custom routing
+Make post indexs into cards rather than tables
+refactor posts having a default image
+render the html from post content as page
 	
