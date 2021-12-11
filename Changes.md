@@ -81,4 +81,8 @@ Changed to seeding database with .csv files
 	Must ignore null date fields (TODO for later see if there is an elegant work around)
 	Must save each table seed to database before seeding the next to ensure FK compliance
 Edited visuals for Blog.Index and had to remove Asp-For when sending formfield as a parameter (was invalidating model when null)
-
+Added tiny cloud mce / linked scripts
+Updated sequences for PK's
+Post.Create 
+	Edited viewbag for BlogId
+	Removed calculated fields on view

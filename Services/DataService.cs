@@ -5,6 +5,7 @@ using CsvHelper.TypeConversion;
 using JohnBlog.Data;
 using JohnBlog.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace JohnBlog.Services
 {
@@ -17,11 +18,20 @@ namespace JohnBlog.Services
             _dbContext = dbContext;
         }
 
-        public async Task SeedDatabaseAsync()
+        public async Task SeedDatabaseAsync(bool reset = false)
         {
-            //await _dbContext.Database.EnsureDeletedAsync();
+            if (reset) await _dbContext.Database.EnsureDeletedAsync();
+
             await _dbContext.Database.EnsureCreatedAsync();
             await SeedDatabaseDefaultAsync();
+
+            // Have to reset the primary key sequences if we manually seed from scratch
+            if (reset)
+            {
+                FileInfo file = new FileInfo(Directory.GetCurrentDirectory() + "/Data/FixPostgresSequence.sql");
+                string script = await file.OpenText().ReadToEndAsync();
+                var result = await _dbContext.Database.ExecuteSqlRawAsync(script);
+            }
         }
 
         private async Task SeedDatabaseDefaultAsync()
