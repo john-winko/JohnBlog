@@ -82,7 +82,11 @@ Changed to seeding database with .csv files
 	Must save each table seed to database before seeding the next to ensure FK compliance
 Edited visuals for Blog.Index and had to remove Asp-For when sending formfield as a parameter (was invalidating model when null)
 Added tiny cloud mce / linked scripts
-Updated sequences for PK's
+Updated sequences for PK's via sql
 Post.Create 
 	Edited viewbag for BlogId
 	Removed calculated fields on view
+	Populated readystatus from enum on view
+	Must make BlogUserId nullable since we save it programmatically (TODO for later refactor to AuthorId)
+
+	
