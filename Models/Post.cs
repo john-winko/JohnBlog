@@ -11,7 +11,10 @@ namespace JohnBlog.Models
         [Display(Name = "Blog Name")]
         public int BlogId { get; set; }
 
-        public string BlogUserId { get; set; }
+        // TODO: rename to AuthorID to make more sense
+        // Set programatically so using required field makes issues on validation, must make nullable since it is blank until saved
+        // [Display(Name = "Blog UserID")]
+        public string? BlogUserId { get; set; }
 
         [Required]
         [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
