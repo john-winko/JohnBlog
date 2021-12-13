@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JohnBlog.Data;
 using JohnBlog.Models;
+using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -12,11 +13,13 @@ namespace JohnBlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly SlugService _slugService;
 
-        public PostsController(ApplicationDbContext context, UserManager<BlogUser> userManager)
+        public PostsController(ApplicationDbContext context, UserManager<BlogUser> userManager, SlugService slugService)
         {
             _context = context;
             _userManager = userManager;
+            _slugService = slugService;
         }
 
         // GET: Posts
@@ -67,8 +70,19 @@ namespace JohnBlog.Controllers
                 post.Created = DateTime.Now;
                 post.BlogUserId = _userManager.GetUserId(User);
                 post.BlogImage = await formFile.ToDbString() ?? post.BlogImage;
-                
-                // TODO: Add slug service
+
+                var slug = _slugService.GenerateUrlSlug(post.Title);
+                // Error check slug before adding
+                if (string.IsNullOrEmpty(slug)) ModelState.AddModelError("", "Slug generated was empty");
+                if (!_slugService.IsUnique(slug)) ModelState.AddModelError("Title", "Same title already exists for a post");
+                if (ModelState.IsValid)
+                {
+                    post.Slug = slug;
+                }
+                else
+                {
+                    return View(post);
+                }
                 
                 _context.Add(post);
                 await _context.SaveChangesAsync();

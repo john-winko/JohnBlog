@@ -20,6 +20,7 @@ builder.Services.AddControllersWithViews();
 
 // register services
 builder.Services.AddScoped<DataService>();
+builder.Services.AddScoped<SlugService>();
 
 var app = builder.Build();
 
