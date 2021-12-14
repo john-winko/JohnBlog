@@ -101,12 +101,11 @@ Routing to Post.Details via slugs
 	Changed Post.Details to use slug instead of ID 
 	Updated return route to use filtered Blog.Index for Post.Details and Post.Edit views and Post.Edit Action
 Made details page only show the html from content
+Implemented conditional elements on views
 *******************************************************************************
 TODO:
 *******************************************************************************
-Make a post index by blogid filter
-Make post indexs into cards rather than tables
 refactor posts having a default image
-render the html from post content as page
-update routing to/from post edits to indexes
+Make entire div.card clickable without reformatting content as hyperlink
+Update action links to be display based on Authorization
 	
