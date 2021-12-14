@@ -24,7 +24,7 @@
                 <ul class="navbar-nav col-md-3 col-12 ps-3">
                     <li>
                         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                            <img class="img-fluid" style="max-height: 20px;" src="JW_Logo.svg" alt=""/>
+                            <img class="img-fluid" style="max-height: 20px;" src="~/JW_Logo.svg" alt=""/>
                         </a>
                     </li>
                 </ul>
@@ -37,7 +37,7 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Blogs" asp-action="Index">Blogs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Blogs" asp-action="Index">Authors</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Authors</a>
                     </li>
                     <li>
                         <form class="d-flex">
@@ -100,6 +100,11 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/n886efg25we4dorulgdlj2sqetsrz9s4g3xat3a5hqcb38x9/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+@* <script *@
+@*     type="text/javascript" *@
+@*     src='https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js' *@
+@*     referrerpolicy="origin"></script> *@
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
