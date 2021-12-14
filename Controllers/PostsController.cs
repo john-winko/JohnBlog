@@ -1,28 +1,42 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JohnBlog.Data;
 using JohnBlog.Models;
+using JohnBlog.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace JohnBlog.Controllers
 {
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BlogUser> _userManager;
+        private readonly SlugService _slugService;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(ApplicationDbContext context, UserManager<BlogUser> userManager, SlugService slugService)
         {
             _context = context;
+            _userManager = userManager;
+            _slugService = slugService;
         }
 
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
+            var applicationDbContext = _context.Posts!.Include(p => p.Blog).Include(p => p.BlogUser);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Posts
+        public async Task<IActionResult> PostsByBlogIndex(int? blogId)
+        {
+            var applicationDbContext = _context.Posts!
+                .Include(p => p.Blog)
+                .Include(p => p.BlogUser)
+                .Where(p => p.BlogId == blogId)
+                .OrderBy(p => p.Created);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +48,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts
+            var post = await _context.Posts!
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -47,10 +61,11 @@ namespace JohnBlog.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description");
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
+            ViewData["BlogUserId"] = _userManager.GetUserId(User);
             return View();
         }
 
@@ -59,16 +74,35 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogId,BlogUserId,Title,Abstract,Content,Created,Updated,ReadyStatus,Slug")] Post post)
+        public async Task<IActionResult> Create(
+            [Bind("Id,BlogUserId,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile? formFile)
         {
             if (ModelState.IsValid)
             {
+                post.Created = DateTime.Now;
+                post.BlogUserId = _userManager.GetUserId(User);
+                post.BlogImage = await formFile.ToDbString() ?? post.BlogImage;
+
+                var slug = _slugService.GenerateUrlSlug(post.Title);
+                // Error check slug before adding
+                if (string.IsNullOrEmpty(slug)) ModelState.AddModelError("", "Slug generated was empty");
+                if (!_slugService.IsUnique(slug))
+                    ModelState.AddModelError("Title", "Same title already exists for a post");
+                if (ModelState.IsValid)
+                {
+                    post.Slug = slug;
+                }
+                else
+                {
+                    return View(post);
+                }
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
+
+            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
             return View(post);
         }
 
@@ -80,11 +114,12 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts!.FindAsync(id);
             if (post == null)
             {
                 return NotFound();
             }
+
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
             return View(post);
@@ -95,7 +130,8 @@ namespace JohnBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,BlogUserId,Title,Abstract,Content,Created,Updated,ReadyStatus,Slug")] Post post)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("Id,BlogId,BlogUserId,Title,Abstract,Content,Created,Updated,ReadyStatus,Slug")] Post post)
         {
             if (id != post.Id)
             {
@@ -120,8 +156,10 @@ namespace JohnBlog.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
             return View(post);
@@ -135,7 +173,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts
+            var post = await _context.Posts!
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -152,15 +190,15 @@ namespace JohnBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
-            _context.Posts.Remove(post);
+            var post = await _context.Posts!.FindAsync(id);
+            _context.Posts.Remove(post!);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PostExists(int id)
         {
-            return _context.Posts.Any(e => e.Id == id);
+            return _context.Posts!.Any(e => e.Id == id);
         }
     }
 }
