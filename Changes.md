@@ -99,6 +99,7 @@ Routing to Post.Details via slugs
 	Updated app.MapControllerRoute
 	Updated PostByBlogIndex View asp-route
 	Changed Post.Details to use slug instead of ID 
+	Updated return route to use filtered Blog.Index for Post.Details and Post.Edit
 *******************************************************************************
 TODO:
 *******************************************************************************
