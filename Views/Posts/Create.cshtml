@@ -18,10 +18,6 @@
                 <label asp-for="BlogId" class="control-label"></label>
                 <select asp-for="BlogId" class="form-control" asp-items="ViewBag.BlogId"></select>
             </div>
-            @* <div class="form-group"> *@
-            @*     <label asp-for="BlogUserId" class="control-label"></label> *@
-            @*     <select asp-for="BlogUserId" class ="form-control" asp-items="ViewBag.BlogUserId"></select> *@
-            @* </div> *@
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control"/>
@@ -32,17 +28,6 @@
                 <textarea asp-for="Abstract" class="form-control"></textarea>
                 <span asp-validation-for="Abstract" class="text-danger"></span>
             </div>
-
-            @* <div class="form-group"> *@
-            @*     <label asp-for="Created" class="control-label"></label> *@
-            @*     <input asp-for="Created" class="form-control" /> *@
-            @*     <span asp-validation-for="Created" class="text-danger"></span> *@
-            @* </div> *@
-            @* <div class="form-group"> *@
-            @*     <label asp-for="Updated" class="control-label"></label> *@
-            @*     <input asp-for="Updated" class="form-control" /> *@
-            @*     <span asp-validation-for="Updated" class="text-danger"></span> *@
-            @* </div> *@
             <div class="form-group">
                 <label asp-for="ReadyStatus" class="control-label"></label>
                 <select asp-for="ReadyStatus" class="form-control" asp-items="@Html.GetEnumSelectList<ReadyStatus>()"></select>
@@ -52,19 +37,12 @@
                 <label asp-for="BlogImage" class="control-label"></label>
                 <input type="file" name="FormFile" class="form-control"/>
                 <span asp-validation-for="BlogImage" class="text-danger"></span>
-
             </div>
-            @* <div class="form-group"> *@
-            @*     <label asp-for="Slug" class="control-label"></label> *@
-            @*     <input asp-for="Slug" class="form-control" /> *@
-            @*     <span asp-validation-for="Slug" class="text-danger"></span> *@
-            @* </div> *@
             <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
                 <textarea asp-for="Content" id="myTextarea"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary"/>
             </div>

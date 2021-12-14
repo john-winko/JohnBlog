@@ -88,13 +88,19 @@ Post.Create
 	Removed calculated fields on view
 	Populated readystatus from enum on view
 	Must make BlogUserId nullable since we save it programmatically (TODO for later refactor to AuthorId)
-	
+	Created slug service for url-friendly routing, implemented it for post creation
+Post.Edit
+	Edited form fields
+	Setting a form field disabled does not post data on form submission
+Blog.Index
+	Created Posts.PostsByBlogIndex for filtering
+	Updated links to route to new Posts.PostsByBlogIndex
 *******************************************************************************
 TODO:
 *******************************************************************************
 Make a post index by blogid filter
-Add a slug service and implement custom routing
 Make post indexs into cards rather than tables
 refactor posts having a default image
 render the html from post content as page
+update routing to/from post edits to indexes
 	

@@ -7,6 +7,7 @@ namespace JohnBlog.Services;
 
 public interface ISlugService
 {
+    // Does this need an interface since we can directly scope it?
     public string GenerateUrlSlug(string title);
     public bool IsUnique(string slug);
 }
