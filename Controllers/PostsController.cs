@@ -151,7 +151,7 @@ namespace JohnBlog.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(PostsByBlogIndex),new {blogId = post.BlogId});
             }
 
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
