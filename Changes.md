@@ -95,6 +95,10 @@ Post.Edit
 Blog.Index
 	Created Posts.PostsByBlogIndex for filtering
 	Updated links to route to new Posts.PostsByBlogIndex
+Routing to Post.Details via slugs
+	Updated app.MapControllerRoute
+	Updated PostByBlogIndex View asp-route
+	Changed Post.Details to use slug instead of ID 
 *******************************************************************************
 TODO:
 *******************************************************************************

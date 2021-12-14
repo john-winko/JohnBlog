@@ -51,6 +51,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Post.Slug routing
+app.MapControllerRoute(
+    "SlugRoute",
+    "Posts/UrlFriendly/{slug}",
+    new {controller="Posts", action="Details"});
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
