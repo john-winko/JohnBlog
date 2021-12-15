@@ -102,10 +102,14 @@ Routing to Post.Details via slugs
 	Updated return route to use filtered Blog.Index for Post.Details and Post.Edit views and Post.Edit Action
 Made details page only show the html from content
 Implemented conditional elements on views
+Home.Index
+	Created ViewModel for showing posts and blogs on homepage
+	Updated controller to populate top 3 posts and all blogs (may filter down later)
 *******************************************************************************
 TODO:
 *******************************************************************************
 refactor posts having a default image
 Make entire div.card clickable without reformatting content as hyperlink
 Update action links to be display based on Authorization
+Implement partial views for repeated content (Posts.Index)
 	
