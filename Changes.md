@@ -113,7 +113,5 @@ TODO:
 *******************************************************************************
 refactor posts having a default image
 Make entire div.card clickable without reformatting content as hyperlink
-Update action links to be display based on Authorization
-Implement partial views for repeated content (Posts.Index)
 Implement more hardened security for authorization (people navigating directly to edit page etc)
 	
