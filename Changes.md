@@ -82,7 +82,7 @@ Changed to seeding database with .csv files
 	Must save each table seed to database before seeding the next to ensure FK compliance
 Edited visuals for Blog.Index and had to remove Asp-For when sending formfield as a parameter (was invalidating model when null)
 Added tiny cloud mce / linked scripts
-Updated sequences for PK's via sql
+Updated sequences for PK's via sql file
 Post.Create 
 	Edited viewbag for BlogId
 	Removed calculated fields on view
@@ -95,12 +95,23 @@ Post.Edit
 Blog.Index
 	Created Posts.PostsByBlogIndex for filtering
 	Updated links to route to new Posts.PostsByBlogIndex
+Routing to Post.Details via slugs
+	Updated app.MapControllerRoute
+	Updated PostByBlogIndex View asp-route
+	Changed Post.Details to use slug instead of ID 
+	Updated return route to use filtered Blog.Index for Post.Details and Post.Edit views and Post.Edit Action
+Made details page only show the html from content
+Implemented conditional elements on views
+Home.Index
+	Created ViewModel for showing posts and blogs on homepage
+	Updated controller to populate top 3 posts and all blogs (may filter down later)
+	Fixed links to Post.Details to use slug route (have to specify asp-controller since partial view)
+Checked authorization to show edit/modify links
+Refactored PostByBlogIndex to simple pass filtered data to Index View
 *******************************************************************************
 TODO:
 *******************************************************************************
-Make a post index by blogid filter
-Make post indexs into cards rather than tables
 refactor posts having a default image
-render the html from post content as page
-update routing to/from post edits to indexes
+Make entire div.card clickable without reformatting content as hyperlink
+Implement more hardened security for authorization (people navigating directly to edit page etc)
 	
