@@ -22,15 +22,15 @@ namespace JohnBlog.Controllers
         {
             var homeVm = new HomeVm()
             {
-               Blogs = _context.Blogs!.ToList(),
+                // TODO: add paging for blogs
+               Blogs = _context.Blogs!
+                   .Take(3)
+                   .ToList(),
                Posts = _context.Posts!
                    .OrderByDescending(p=> p.Created)
                    .Take(3)
                    .ToList()
             };
-                //
-                // .OrderByDescending(p => p.Created)
-                // .Take(3);
             return View(homeVm);
         }
 

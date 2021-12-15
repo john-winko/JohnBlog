@@ -5,22 +5,28 @@
 }
 
 <div class="text-center">
+    <hr/>
     <h1 class="display-4">John's Blogs</h1>
     <h3>Observations, Advice, Tutorials</h3>
-    <div>
-        <a href="#" class="btn btn-outline-2">Tag 1</a>
-        <a href="#" class="btn btn-outline-2">Long Tag 1</a>
-        <a href="#" class="btn btn-outline-2">Even Longer Tag 1</a>
-        <a href="#" class="btn btn-outline-2">Tag 1</a>
-        <a href="#" class="btn btn-outline-2">Tag 1</a>
-        <a href="#" class="btn btn-outline-2">Tag 1</a>
-    </div>
-    <hr />
-    
-    @await Html.PartialAsync("~/Views/Blogs/Index.cshtml", Model!.Blogs)
-    
+    @*************************************************@
+    @* TODO: Add tags*@
+    @*************************************************@
+    @* <div> *@
+    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
+    @*     <a href="#" class="btn btn-outline-2">Long Tag 1</a> *@
+    @*     <a href="#" class="btn btn-outline-2">Even Longer Tag 1</a> *@
+    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
+    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
+    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
+    @* </div> *@
     <hr/>
-    
-    @await Html.PartialAsync("~/Views/Posts/Index.cshtml", Model!.Posts)
-        
+
+    @await Html.PartialAsync("~/Views/Blogs/Index.cshtml", Model!.Blogs)
+
+    <hr/>
+    <h1>Recent Posts</h1>
+    <hr/>
+    <div class="mb-5">
+        @await Html.PartialAsync("~/Views/Posts/PostsByBlogIndex.cshtml", Model!.Posts)
+    </div>
 </div>
