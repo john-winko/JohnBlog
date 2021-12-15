@@ -37,6 +37,7 @@ namespace JohnBlog.Models
 
         public ReadyStatus ReadyStatus { get; set; }
 
+        // EF Core does not support unique constraint but EF6+ does... workaround?
         public string? Slug { get; set; }
 
         public string? BlogImage { get; set; }

@@ -37,10 +37,11 @@
                 <input type="file" name="FormFile" class="form-control" />
                 <span asp-validation-for="BlogImage" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group mt-2 mb-2">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Delete" asp-route-id="@Model!.Id" class="btn btn-primary">Delete</a>
             </div>
-            <a asp-action="Delete" asp-route-id="@Model!.Id" class="btn btn-primary">Delete</a>
+            
         </form>
     </div>
     <div class="col-md-4">
