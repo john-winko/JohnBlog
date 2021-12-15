@@ -1,21 +1,37 @@
 ﻿using JohnBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using JohnBlog.Data;
+using JohnBlog.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace JohnBlog.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var homeVm = new HomeVm()
+            {
+               Blogs = _context.Blogs!.ToList(),
+               Posts = _context.Posts!
+                   .OrderByDescending(p=> p.Created)
+                   .Take(3)
+                   .ToList()
+            };
+                //
+                // .OrderByDescending(p => p.Created)
+                // .Take(3);
+            return View(homeVm);
         }
 
         public IActionResult Privacy()
