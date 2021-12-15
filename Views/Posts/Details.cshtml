@@ -1,12 +1,22 @@
+@using Microsoft.AspNetCore.Identity
 @model JohnBlog.Models.Post
-
+@inject UserManager<BlogUser> _userManager
 @{
     ViewData["Title"] = "Details";
 }
+@{
+    var isAuthor = User.Identity!.IsAuthenticated && 
+                   Model!.BlogUserId == _userManager.GetUserId(User);
+}  
+
 @Html.Raw(Model!.Content)
 
 <hr/>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a> |
+    @if (isAuthor)
+    {
+        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a><span> |</span>
+    }
+    
     <a asp-action="PostsByBlogIndex" asp-route-blogId="@Model!.BlogId">Back to List</a>
 </div>
