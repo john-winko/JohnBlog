@@ -106,7 +106,8 @@ Home.Index
 	Created ViewModel for showing posts and blogs on homepage
 	Updated controller to populate top 3 posts and all blogs (may filter down later)
 	Fixed links to Post.Details to use slug route (have to specify asp-controller since partial view)
-
+Checked authorization to show edit/modify links
+Refactored PostByBlogIndex to simple pass filtered data to Index View
 *******************************************************************************
 TODO:
 *******************************************************************************
@@ -114,4 +115,5 @@ refactor posts having a default image
 Make entire div.card clickable without reformatting content as hyperlink
 Update action links to be display based on Authorization
 Implement partial views for repeated content (Posts.Index)
+Implement more hardened security for authorization (people navigating directly to edit page etc)
 	
