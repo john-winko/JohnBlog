@@ -105,6 +105,8 @@ Implemented conditional elements on views
 Home.Index
 	Created ViewModel for showing posts and blogs on homepage
 	Updated controller to populate top 3 posts and all blogs (may filter down later)
+	Fixed links to Post.Details to use slug route (have to specify asp-controller since partial view)
+
 *******************************************************************************
 TODO:
 *******************************************************************************
