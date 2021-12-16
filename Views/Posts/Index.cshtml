@@ -1,22 +1,8 @@
-@using Microsoft.AspNetCore.Identity
 @model IEnumerable<JohnBlog.Models.Post>
-@inject UserManager<BlogUser> _userManager
 
 @{
     ViewData["Title"] = "Test";
 }
-@{
-    var isAuthor = User.Identity!.IsAuthenticated && 
-                   Model!.FirstOrDefault()!.BlogUserId == _userManager.GetUserId(User);
-}    
-
-@if (isAuthor)
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
-
 
 <div class="row">
     @foreach (var item in Model!)
