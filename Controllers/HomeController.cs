@@ -25,6 +25,7 @@ namespace JohnBlog.Controllers
                 // TODO: add paging for blogs
                Blogs = _context.Blogs!
                    .Take(3)
+                   .Include(m=>m.Posts)
                    .ToList(),
                Posts = _context.Posts!
                    .OrderByDescending(p=> p.Created)

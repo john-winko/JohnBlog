@@ -108,10 +108,19 @@ Home.Index
 	Fixed links to Post.Details to use slug route (have to specify asp-controller since partial view)
 Checked authorization to show edit/modify links
 Refactored PostByBlogIndex to simple pass filtered data to Index View
+UI update
+	Changed Blog and Post Index cards to use <a class="stretched-link"> to make entire div clickable
+	Updated Blogs.Index to include Posts (since it uses count)
+	Updated navbar, admin login -> New Blog, author login -> create Post
+Updated roles, added author to admin and mod emails so they can make new posts, assigned mod email one blog
+
 *******************************************************************************
 TODO:
 *******************************************************************************
+Calculate the Post abstract by parsing out the html
+Update locations of edit links, make create blog and create posts nav menu items
 refactor posts having a default image
-Make entire div.card clickable without reformatting content as hyperlink
 Implement more hardened security for authorization (people navigating directly to edit page etc)
-	
+Make a load more function for long list of posts (paging then render incrementally?)
+Make administrator able to assign blogs to user
+Hide Posts based on ReadyStatus	

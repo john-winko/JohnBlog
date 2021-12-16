@@ -58,8 +58,15 @@ namespace JohnBlog.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
+            // Check if they are assigned any blogs
+            var b = _context.Blogs!
+                .Where(b => b.BlogUserId == _userManager.GetUserId(User));
+            if (!b.Any())return Problem("You have not been assigned a blog to post to");
+            
+           // ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             ViewData["BlogUserId"] = _userManager.GetUserId(User);
+            ViewData["BlogIds"] = new SelectList(b.ToList(), "Id", "Name");
+            
             return View();
         }
 
