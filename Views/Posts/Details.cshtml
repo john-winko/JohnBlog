@@ -8,6 +8,10 @@
     var isAuthor = User.Identity!.IsAuthenticated && 
                    Model!.BlogUserId == _userManager.GetUserId(User);
 }  
+    @if (isAuthor)
+    {
+        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a>
+    }
 <div class="row">
     <div class="col-9">@Html.Raw(Model!.Content)</div>
     <div class="col-3 text-center">
@@ -38,10 +42,7 @@
 
 <hr/>
 <div>
-    @if (isAuthor)
-    {
-        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a><span> |</span>
-    }
+
     
     <a asp-action="PostsByBlogIndex" asp-route-blogId="@Model!.BlogId">Back to List</a>
 </div>

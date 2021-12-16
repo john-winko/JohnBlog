@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using JohnBlog.Data;
+using JohnBlog.Enums;
 using JohnBlog.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,7 @@ namespace JohnBlog.Controllers
                    .Include(m=>m.Posts)
                    .ToList(),
                Posts = _context.Posts!
+                   .Where(p=>p.ReadyStatus == ReadyStatus.Production)
                    .OrderByDescending(p=> p.Created)
                    .Take(3)
                    .Include(b=>b.Blog)
