@@ -113,6 +113,8 @@ UI update
 	Updated Blogs.Index to include Posts (since it uses count)
 	Updated navbar, admin login -> New Blog, author login -> create Post
 Updated roles, added author to admin and mod emails so they can make new posts, assigned mod email one blog
+Have to grab content before saving to postback in database
+Footer is cutting off bottom elements due to fixed-bottom, changed it to bottom:0 instead
 
 *******************************************************************************
 TODO:

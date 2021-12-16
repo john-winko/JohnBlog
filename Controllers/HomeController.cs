@@ -20,6 +20,7 @@ namespace JohnBlog.Controllers
 
         public IActionResult Index()
         {
+            // When populating, make sure any FK are populated as well if used for display
             var homeVm = new HomeVm()
             {
                 // TODO: add paging for blogs
@@ -31,6 +32,7 @@ namespace JohnBlog.Controllers
                Posts = _context.Posts!
                    .OrderByDescending(p=> p.Created)
                    .Take(3)
+                   .Include(b=>b.Blog)
                    .ToList()
             };
             return View(homeVm);
