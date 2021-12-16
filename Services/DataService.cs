@@ -12,6 +12,7 @@ namespace JohnBlog.Services
     public class DataService
     {
         private readonly ApplicationDbContext _dbContext;
+        
 
         public DataService(ApplicationDbContext dbContext)
         {
