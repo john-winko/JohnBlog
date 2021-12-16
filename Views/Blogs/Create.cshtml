@@ -10,11 +10,12 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @* TODO: add list of BlogUserIds for admin to select from for ownership *@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -24,12 +25,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="BlogImage" class="control-label"></label>
-                <input type="file" asp-for="BlogImage" name="FormFile" class="form-control" />
+                <input type="file" asp-for="BlogImage" name="FormFile" class="form-control"/>
                 <span asp-validation-for="BlogImage" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/>
             </div>
         </form>
     </div>

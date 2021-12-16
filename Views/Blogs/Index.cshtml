@@ -1,21 +1,21 @@
-@using Microsoft.AspNetCore.Identity
+@* @using Microsoft.AspNetCore.Identity *@
 @model IEnumerable<JohnBlog.Models.Blog>
-@inject UserManager<BlogUser> _userManager
+@* @inject UserManager<BlogUser> _userManager *@
 
 @{
     ViewData["Title"] = "Index";
 }
-@{
-    var isAuthor = User.Identity!.IsAuthenticated &&
-                   Model!.FirstOrDefault()!.BlogUserId == _userManager.GetUserId(User);
-}
-
-@if (isAuthor)
-{
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-}
+@* @{ *@
+@*     var isAuthor = User.Identity!.IsAuthenticated && *@
+@*                    Model!.FirstOrDefault()!.BlogUserId == _userManager.GetUserId(User); *@
+@* } *@
+@* *@
+@* @if (isAuthor) *@
+@* { *@
+@*     <p> *@
+@*         <a asp-action="Create">Create New</a> *@
+@*     </p> *@
+@* } *@
 
 <div class="row">
     @foreach (var item in Model!)
