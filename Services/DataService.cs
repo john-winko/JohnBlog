@@ -12,15 +12,19 @@ namespace JohnBlog.Services
     public class DataService
     {
         private readonly ApplicationDbContext _dbContext;
-        
+        private readonly UserManager<BlogUser> _userManager;
 
-        public DataService(ApplicationDbContext dbContext)
+        public DataService(ApplicationDbContext dbContext, UserManager<BlogUser> userManager)
         {
             _dbContext = dbContext;
+            _userManager = userManager;
         }
 
         public async Task SeedDatabaseAsync(bool reset = false)
         {
+            var d = _dbContext.Users.First(d => d.Email == "john.winko@gmail.com");
+            await _userManager.AddToRoleAsync(d, "Author");
+            
             if (reset) await _dbContext.Database.EnsureDeletedAsync();
 
             await _dbContext.Database.EnsureCreatedAsync();
