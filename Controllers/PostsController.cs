@@ -37,9 +37,14 @@ namespace JohnBlog.Controllers
                 .Include(p => p.BlogUser)
                 .Where(p => p.BlogId == blogId)
                 .OrderBy(p => p.Created);
-            return View("Index",await applicationDbContext.ToListAsync());
+            return applicationDbContext.Any() ? View("Index",await applicationDbContext.ToListAsync()) : View("NoPosts");
         }
 
+        public IActionResult NoPosts()
+        {
+            return View();
+        }
+        
         public async Task<IActionResult> Details(string? slug)
         {
             if (slug is null) return NotFound();

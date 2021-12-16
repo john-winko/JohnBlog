@@ -25,6 +25,7 @@ namespace JohnBlog.Controllers
                 // TODO: add paging for blogs
                Blogs = _context.Blogs!
                    .Take(3)
+                   .Include(b=>b.BlogUser)
                    .Include(m=>m.Posts)
                    .ToList(),
                Posts = _context.Posts!
@@ -35,6 +36,11 @@ namespace JohnBlog.Controllers
             return View(homeVm);
         }
 
+        public IActionResult NoContentYet()
+        {
+            return View();
+        }
+        
         public IActionResult Privacy()
         {
             return View();
