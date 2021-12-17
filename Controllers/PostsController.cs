@@ -26,6 +26,7 @@ namespace JohnBlog.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Posts!
+                .OrderByDescending(p=>p.Created)
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser);
             ViewData["BlogUserId"] = applicationDbContext.FirstOrDefault()!.BlogUserId;
