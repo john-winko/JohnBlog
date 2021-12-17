@@ -1,10 +1,46 @@
+@using JohnBlog.Enums
+@using Microsoft.AspNetCore.Identity
 @model IEnumerable<JohnBlog.Models.Post>
+@inject UserManager<BlogUser> _userManager
 
 @{
     ViewData["Title"] = "Test";
-}
 
+    var isAuthor = User.Identity!.IsAuthenticated &&
+                   Model!.FirstOrDefault()!.BlogUserId == _userManager.GetUserId(User);
+}
 <div class="row">
+    @if (isAuthor)
+    {
+        var drafts = Model!.Where(p => p.ReadyStatus != ReadyStatus.Production).ToList();
+        if (drafts.Any())
+        {
+            <h1>Draft</h1>
+            @foreach (var draft in drafts)
+            {
+                <div class="col-lg-4 col-12 p-2">
+                    <div class="card h-100 bg-light">
+                        <div class="card-header">
+                            @draft.Blog!.Name
+                        </div>
+                        <div class="card-body d-flex flex-column text-start">
+                            <h3 class="card-title">@draft.Title</h3>
+                            <p class="card-text">@draft.Abstract</p>
+                            <a asp-controller="Posts" asp-action="Details" asp-route-slug="@draft.Slug" class="stretched-link"></a>
+                        </div>
+                        <div class="card-footer">
+                            @draft.Created.ToString("yyyy MMMM dd")
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+    @if (isAuthor)
+    {
+        <h1>Production</h1>
+    }
+
     @foreach (var item in Model!)
     {
         <div class="col-lg-4 col-12 p-2">
@@ -21,7 +57,7 @@
                     @item.Created.ToString("yyyy MMMM dd")
                 </div>
             </div>
-            
+
         </div>
     }
 </div>

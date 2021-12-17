@@ -25,7 +25,10 @@ namespace JohnBlog.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts!.Include(p => p.Blog).Include(p => p.BlogUser);
+            var applicationDbContext = _context.Posts!
+                .Include(p => p.Blog)
+                .Include(p => p.BlogUser);
+            ViewData["BlogUserId"] = applicationDbContext.FirstOrDefault()!.BlogUserId;
             return View(await applicationDbContext.ToListAsync());
         }
 
