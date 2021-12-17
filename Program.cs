@@ -25,7 +25,7 @@ builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<SlugService>();
 builder.Services.Configure<MailSettings>(
     builder.Configuration.GetSection(MailSettings.JSONName));
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailSender, EmailService>();
 
 var app = builder.Build();
 
