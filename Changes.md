@@ -126,18 +126,23 @@ Added MailService
 	Done through gmail smtp (https://www.c-sharpcorner.com/blogs/send-email-using-gmail-smtp)
 	Added MimeKit, MailKit nuget
 	Having a real bad time with injecting the email service, mailsettings are getting implemented... forgot that views must use IOptions and retrieve corresponding value
+Updated registration page to include First/Last Name
+	Updated code behind to populate First/Last names for BlogUser creation
+
 *******************************************************************************
 TODO:
 *******************************************************************************
+Cleanup old test users
+Tags with ajax autofill/autocomplete
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
 Make a page to show all authors
 
 
 
-
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Add OAuth logins and registration
 Make a load more function for long list of posts (paging then render incrementally?)
 Make overflow background a different color

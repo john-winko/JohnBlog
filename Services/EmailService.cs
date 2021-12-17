@@ -2,12 +2,13 @@
 using JohnBlog.ViewModels;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace JohnBlog.Services;
 
-public class EmailService : IEmailService
+public class EmailService : IEmailSender
 {
     private readonly MailSettings _mailSettings;
 
