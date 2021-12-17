@@ -119,14 +119,16 @@ Implemented Prism.js
 Footer is cutting off bottom elements due to fixed-bottom, added a div with fixed height before (TODO: add fancy css to calculate space needed)
 Added delete to Post.Edit. Button/anchor must be outside of form otherwise form submit will occur
 Hiding posts that aren't ReadyStatus.Production unless logged in as the blog author
+Added edit link to Blog.Index
+	Setting Z-Index allows for clickable links in stretched-link cards
+Updated Blog.Edit to change Blog ownership via email select list (may need to make this a searchable item later)
 
 *******************************************************************************
 TODO:
 *******************************************************************************
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
-Make administrator able to assign blogs to user
-
+Make a page to show all authors
 
 
 
@@ -135,3 +137,4 @@ Make administrator able to assign blogs to user
 Way Later:
 *******************************************************************************
 Make a load more function for long list of posts (paging then render incrementally?)
+Make overflow background a different color
