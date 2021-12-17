@@ -113,14 +113,25 @@ UI update
 	Updated Blogs.Index to include Posts (since it uses count)
 	Updated navbar, admin login -> New Blog, author login -> create Post
 Updated roles, added author to admin and mod emails so they can make new posts, assigned mod email one blog
+Implemented Prism.js
+	Made hidden element for binding Post.Content
+	Updated tinymce.init setup to change element value when editor changes (have to verify this does not cut off last change when submitting)
+Footer is cutting off bottom elements due to fixed-bottom, added a div with fixed height before (TODO: add fancy css to calculate space needed)
+Added delete to Post.Edit. Button/anchor must be outside of form otherwise form submit will occur
+Hiding posts that aren't ReadyStatus.Production unless logged in as the blog author
 
 *******************************************************************************
 TODO:
 *******************************************************************************
 Calculate the Post abstract by parsing out the html
-Update locations of edit links, make create blog and create posts nav menu items
-refactor posts having a default image
 Implement more hardened security for authorization (people navigating directly to edit page etc)
-Make a load more function for long list of posts (paging then render incrementally?)
 Make administrator able to assign blogs to user
-Hide Posts based on ReadyStatus	
+
+
+
+
+
+*******************************************************************************
+Way Later:
+*******************************************************************************
+Make a load more function for long list of posts (paging then render incrementally?)

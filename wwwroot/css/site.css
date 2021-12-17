@@ -41,3 +41,10 @@ nav.navbar a.nav-link:hover{
   height: 60px;
   line-height: 60px;
 }
+
+pre{
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

@@ -25,7 +25,10 @@ namespace JohnBlog.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts!.Include(p => p.Blog).Include(p => p.BlogUser);
+            var applicationDbContext = _context.Posts!
+                .Include(p => p.Blog)
+                .Include(p => p.BlogUser);
+            ViewData["BlogUserId"] = applicationDbContext.FirstOrDefault()!.BlogUserId;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -37,9 +40,14 @@ namespace JohnBlog.Controllers
                 .Include(p => p.BlogUser)
                 .Where(p => p.BlogId == blogId)
                 .OrderBy(p => p.Created);
-            return View("Index",await applicationDbContext.ToListAsync());
+            return applicationDbContext.Any() ? View("Index",await applicationDbContext.ToListAsync()) : View("NoPosts");
         }
 
+        public IActionResult NoPosts()
+        {
+            return View();
+        }
+        
         public async Task<IActionResult> Details(string? slug)
         {
             if (slug is null) return NotFound();
