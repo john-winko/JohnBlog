@@ -8,15 +8,37 @@
     var isAuthor = User.Identity!.IsAuthenticated && 
                    Model!.BlogUserId == _userManager.GetUserId(User);
 }  
-
-@Html.Raw(Model!.Content)
-
-<hr/>
-<div>
     @if (isAuthor)
     {
-        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a><span> |</span>
+        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a>
     }
-    
+<div class="row">
+    <div class="col-9">@Html.Raw(Model!.Content)</div>
+    <div class="col-3 text-center">
+        <h2>@Model.Blog!.Name</h2>
+        <h5>Tags</h5>
+        <ul class="text-start">
+            <li class="d-inline-block rounded-pill bg-info p-2 mb-1">tag name here</li>
+            <li class="d-inline-block rounded-pill bg-info p-2 mb-1">tag name here</li>
+            <li class="d-inline-block rounded-pill bg-info p-2 mb-1">tag name here</li>
+        </ul>
+        <hr/>
+        <h5>About the Author</h5>
+        <img alt="" class="img-fluid" src="@Model.BlogUser!.BlogImage" style="border-radius: 30px;"/>
+        <p>@Model.BlogUser!.FirstName @Model.BlogUser.LastName</p>
+        <hr/>
+        <div class="text-start">
+            <h6>
+                @Model.BlogUser.Title
+            </h6>
+            <p>
+                @Model.BlogUser.Blurb
+            </p>
+        </div>
+        
+    </div>
+</div>
+<hr/>
+<div>
     <a asp-action="PostsByBlogIndex" asp-route-blogId="@Model!.BlogId">Back to List</a>
 </div>

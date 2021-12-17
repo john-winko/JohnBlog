@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using JohnBlog.Data;
+using JohnBlog.Enums;
 using JohnBlog.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,21 +21,30 @@ namespace JohnBlog.Controllers
 
         public IActionResult Index()
         {
+            // When populating, make sure any FK are populated as well if used for display
             var homeVm = new HomeVm()
             {
                 // TODO: add paging for blogs
                Blogs = _context.Blogs!
                    .Take(3)
+                   .Include(b=>b.BlogUser)
                    .Include(m=>m.Posts)
                    .ToList(),
                Posts = _context.Posts!
+                   .Where(p=>p.ReadyStatus == ReadyStatus.Production)
                    .OrderByDescending(p=> p.Created)
                    .Take(3)
+                   .Include(b=>b.Blog)
                    .ToList()
             };
             return View(homeVm);
         }
 
+        public IActionResult NoContentYet()
+        {
+            return View();
+        }
+        
         public IActionResult Privacy()
         {
             return View();
