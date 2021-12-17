@@ -122,7 +122,10 @@ Hiding posts that aren't ReadyStatus.Production unless logged in as the blog aut
 Added edit link to Blog.Index
 	Setting Z-Index allows for clickable links in stretched-link cards
 Updated Blog.Edit to change Blog ownership via email select list (may need to make this a searchable item later)
-
+Added MailService
+	Done through gmail smtp (https://www.c-sharpcorner.com/blogs/send-email-using-gmail-smtp)
+	Added MimeKit, MailKit nuget
+	Having a real bad time with injecting the email service, mailsettings are getting implemented... forgot that views must use IOptions and retrieve corresponding value
 *******************************************************************************
 TODO:
 *******************************************************************************

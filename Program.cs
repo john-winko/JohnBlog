@@ -1,7 +1,9 @@
 using JohnBlog.Data;
 using JohnBlog.Models;
 using JohnBlog.Services;
+using JohnBlog.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,9 @@ builder.Services.AddControllersWithViews();
 // register services
 builder.Services.AddScoped<DataService>();
 builder.Services.AddScoped<SlugService>();
+builder.Services.Configure<MailSettings>(
+    builder.Configuration.GetSection(MailSettings.JSONName));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
