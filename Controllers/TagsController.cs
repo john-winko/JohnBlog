@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +18,7 @@ namespace JohnBlog.Controllers
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tags.Include(t => t.Post);
+            var applicationDbContext = _context.Tags!.Include(t => t.Post);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +30,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var tag = await _context.Tags
+            var tag = await _context.Tags!
                 .Include(t => t.Post)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
@@ -77,7 +73,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var tag = await _context.Tags.FindAsync(id);
+            var tag = await _context.Tags!.FindAsync(id);
             if (tag == null)
             {
                 return NotFound();
@@ -130,7 +126,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var tag = await _context.Tags
+            var tag = await _context.Tags!
                 .Include(t => t.Post)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
@@ -146,15 +142,15 @@ namespace JohnBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tag = await _context.Tags.FindAsync(id);
-            _context.Tags.Remove(tag);
+            var tag = await _context.Tags!.FindAsync(id);
+            _context.Tags.Remove(tag!);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TagExists(int id)
         {
-            return _context.Tags.Any(e => e.Id == id);
+            return _context.Tags!.Any(e => e.Id == id);
         }
     }
 }
