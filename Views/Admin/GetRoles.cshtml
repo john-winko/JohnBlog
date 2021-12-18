@@ -1,31 +1,25 @@
-﻿@inject UserManager<BlogUser> _userManager
-@using JohnBlog.Models
-@using Microsoft.AspNetCore.Identity
-@model IEnumerable<JohnBlog.Models.BlogUser>
+﻿@model System.Collections.Generic.IList<JohnBlog.Models.BlogUser>
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>@ViewData["RoleName"]</h2>
 <table>
     <thead>
     <tr>
         <th>
-            @Html.DisplayNameFor(model=>model.FirstName)
+            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(model=>model.LastName)
+            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.LastName)
         </th>
         <th>
-            @Html.DisplayNameFor(model=>model.Email)
+            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.Email)
         </th>
         <th>
-            @Html.DisplayNameFor(model=>model.EmailConfirmed)
-        </th>
-        <th>
-            Roles
+            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.EmailConfirmed)
         </th>
         <th>
             Actions
@@ -50,9 +44,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem=>user.EmailConfirmed)
-                </td>
-                <td>
-
                 </td>
                 <td>
                     <a href="#">Edit</a>
