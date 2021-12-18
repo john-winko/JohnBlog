@@ -55,7 +55,7 @@
                 </td>
                 <td class="text-center">
                     <a href="#">Edit</a>
-                    <a href="#">Delete</a>
+                    <a asp-action="DeleteUser" asp-route-blogUserId="@user.Id">Delete</a>
                 </td>
                 @foreach (var role in Enum.GetNames(typeof(BlogRole)))
                 {
