@@ -2,6 +2,7 @@
 using JohnBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JohnBlog.Controllers;
 
@@ -10,6 +11,11 @@ public class AdminController : Controller
     private readonly ApplicationDbContext _context;
     private readonly UserManager<BlogUser> _userManager;
 
+    public class UserDetails : BlogUser
+    {
+        public string Roles { get; set; }
+    }
+    
     public AdminController(ApplicationDbContext context, UserManager<BlogUser> userManager)
     {
         _context = context;
@@ -17,9 +23,13 @@ public class AdminController : Controller
     }
     
 // GET
-    public IActionResult Index()
+    public async Task<IActionResult> GetRoles(string? roleName)
     {
-        var users = _context.Users;
+        ViewData["RoleName"] = roleName ?? "All";
+        if (roleName is null) return View(_context.Users.ToList());
+        
+        var users = await _userManager.GetUsersInRoleAsync(roleName);
+        
         return View(users);
     }
 
