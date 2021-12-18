@@ -1,8 +1,9 @@
 ﻿using JohnBlog.Data;
+using JohnBlog.Enums;
 using JohnBlog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace JohnBlog.Controllers;
 
@@ -10,11 +11,6 @@ public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<BlogUser> _userManager;
-
-    public class UserDetails : BlogUser
-    {
-        public string Roles { get; set; }
-    }
     
     public AdminController(ApplicationDbContext context, UserManager<BlogUser> userManager)
     {
@@ -22,20 +18,32 @@ public class AdminController : Controller
         _userManager = userManager;
     }
     
-// GET
-    public async Task<IActionResult> GetRoles(string? roleName)
+    // GET
+    // TODO: use custom attribute editor
+    [Authorize(Roles = "Administrator")]
+    public IActionResult GetRoles()
     {
-        ViewData["RoleName"] = roleName ?? "All";
-        if (roleName is null) return View(_context.Users.ToList());
-        
-        var users = await _userManager.GetUsersInRoleAsync(roleName);
-        
+        var users = _context.Users
+            .OrderByDescending(p=>p.EmailConfirmed)
+            .ThenByDescending(p=>p.Email)
+            .ToList();
         return View(users);
     }
 
-    // public IActionResult Edit(string blogUserId)
-    // {
-    //     
-    // }
-    // TODO: add edit / delete functionality 
+    public async Task<IActionResult> RemoveRole(string blogUserId, string roleName)
+    {
+        var user = await _userManager.FindByIdAsync(blogUserId);
+        await _userManager.RemoveFromRoleAsync(user, roleName);
+        return RedirectToAction("GetRoles");
+    }
+
+    public async Task<IActionResult> AddRole(string blogUserId, string roleName)
+    {
+        var user = await _userManager.FindByIdAsync(blogUserId);
+       var s= await _userManager.AddToRoleAsync(user, roleName);
+       
+        return RedirectToAction("GetRoles");
+    }
+    
+    // TODO: create custom view/model that joins roles with users... injecting and repeatedly using usermanager = BAD!
 }

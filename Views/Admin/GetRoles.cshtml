@@ -1,29 +1,37 @@
-﻿@model System.Collections.Generic.IList<JohnBlog.Models.BlogUser>
+﻿@using JohnBlog.Enums
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<BlogUser> _userManager
+@model System.Collections.Generic.IList<JohnBlog.Models.BlogUser>
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
-<h2>@ViewData["RoleName"]</h2>
-<table>
+<table class="table table-striped align-content-center">
     <thead>
     <tr>
-        <th>
-            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.FirstName)
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.FirstOrDefault()!.FirstName)
         </th>
-        <th>
-            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.LastName)
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.FirstOrDefault()!.LastName)
         </th>
-        <th>
-            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.Email)
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.FirstOrDefault()!.Email)
         </th>
-        <th>
-            @Html.DisplayNameFor(model=>model.FirstOrDefault()!.EmailConfirmed)
+        <th class="text-center">
+            @Html.DisplayNameFor(model => model.FirstOrDefault()!.EmailConfirmed)
         </th>
-        <th>
+        <th class="text-center">
             Actions
         </th>
+        @foreach (var role in Enum.GetNames(typeof(BlogRole)))
+        {
+            <th class="text-center">
+                @role
+            </th>
+        }
     </tr>
     </thead>
     <tbody>
@@ -33,25 +41,44 @@
         foreach (var user in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem=>user.FirstName)
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.FirstName)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem=>user.LastName)
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.LastName)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem=>user.Email)
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.Email)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem=>user.EmailConfirmed)
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.EmailConfirmed)
                 </td>
-                <td>
+                <td class="text-center">
                     <a href="#">Edit</a>
                     <a href="#">Delete</a>
                 </td>
+                @foreach (var role in Enum.GetNames(typeof(BlogRole)))
+                {
+                    <td class="text-center">
+                        @if (_userManager.IsInRoleAsync(user, role).Result)
+                        {
+                            //delete
+                            <a asp-action="RemoveRole" asp-route-roleName="@role" asp-route-blogUserId="@user.Id">
+                                <button class="btn rounded-pill btn-info">X</button>
+                            </a>
+                        }
+                        else
+                        {
+                            //add
+                            <a asp-action="AddRole" asp-route-roleName="@role" asp-route-blogUserId="@user.Id">
+                                <button class="btn rounded-pill btn-info">+</button>
+                            </a>
+                        }
+                    </td>
+                }
             </tr>
         }
     }
-    
+
     </tbody>
 </table>
