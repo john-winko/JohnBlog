@@ -128,7 +128,8 @@ Added MailService
 	Having a real bad time with injecting the email service, mailsettings are getting implemented... forgot that views must use IOptions and retrieve corresponding value
 Updated registration page to include First/Last Name
 	Updated code behind to populate First/Last names for BlogUser creation
-
+Created Admin.GetRoles
+	Show all users, user details (email confirmed, roles assigned) currently injecting usermanager but should use a linq statement on dbcontext
 *******************************************************************************
 TODO:
 *******************************************************************************
@@ -136,7 +137,7 @@ Cleanup old test users
 Tags with ajax autofill/autocomplete
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
-Make a page to show all authors
+
 
 
 
