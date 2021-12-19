@@ -130,6 +130,10 @@ Updated registration page to include First/Last Name
 	Updated code behind to populate First/Last names for BlogUser creation
 Created Admin.GetRoles
 	Show all users, user details (email confirmed, roles assigned) currently injecting usermanager but should use a linq statement on dbcontext
+	Created linq statement to left join (twice) the roleId->RoleName into dictionary
+Created Admin.AddRole, Admin.DeleteRole by BlogUserId
+Created Admin.DeleteUser with confirmation page
+
 *******************************************************************************
 TODO:
 *******************************************************************************
@@ -144,6 +148,7 @@ Implement more hardened security for authorization (people navigating directly t
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Tried making an area for admin but routing keeps getting borked and views do not show asp-action etc for a links
 Add OAuth logins and registration
 Make a load more function for long list of posts (paging then render incrementally?)
 Make overflow background a different color
