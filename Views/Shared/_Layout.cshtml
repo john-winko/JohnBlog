@@ -38,7 +38,7 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Blogs" asp-action="Index">Blogs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Authors</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">Posts</a>
                     </li>
                     <li>
                         <form class="d-flex">
@@ -51,6 +51,9 @@
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Blogs" asp-action="Create">New Blog</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="GetRoles">Users</a>
                         </li>
                     }
                     @if (User.IsInRole(BlogRole.Author.ToString()))

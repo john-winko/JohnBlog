@@ -1,7 +1,9 @@
+@using JohnBlog.Enums
 @model IEnumerable<JohnBlog.Models.Blog>
 
 @{
     ViewData["Title"] = "Index";
+    var isAdmin = User.Identity!.IsAuthenticated && User.IsInRole(BlogRole.Administrator.ToString()); // _userManager.GetUserId(User);
 }
 
 <div class="row">
@@ -19,9 +21,17 @@
                 </div>
                 <div class="card-footer">
                     @item.Posts.Count posts by @item.BlogUser!.FirstName @item.BlogUser!.LastName
+                    @if (isAdmin)
+                    {
+                        // set z-index higher allows clicking with stretched-link
+                        <div style="z-index: 2;position: relative;">
+                            <a asp-controller="Blogs" asp-action="Edit" asp-route-Id="@item.Id" class="mb-3">Edit</a>
+                            <br/>
+                        </div>
+                    }
                 </div>
             </div>
-            
+
         </div>
     }
 </div>

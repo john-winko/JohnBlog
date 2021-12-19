@@ -1,0 +1,86 @@
+﻿@using JohnBlog.Enums
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<BlogUser> _userManager
+@* @model System.Collections.Generic.IList<JohnBlog.Models.BlogUser> *@
+@model Dictionary<BlogUser, List<IdentityRole>>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+    System.Diagnostics.Debug.Assert(Model != null, nameof(Model) + " != null");
+    BlogUser template = Model.FirstOrDefault().Key;
+}
+
+<table class="table table-striped align-content-center">
+    <thead>
+    <tr>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => template.FirstName)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => template.LastName)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => template.Email)
+        </th>
+        <th class="text-center">
+            @Html.DisplayNameFor(model => template.EmailConfirmed)
+        </th>
+        <th class="text-center">
+            Actions
+        </th>
+        @foreach (var role in Enum.GetNames(typeof(BlogRole)))
+        {
+            <th class="text-center">
+                @role
+            </th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+
+    @if (Model is not null)
+    {
+        foreach (var user in Model)
+        {
+            <tr>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.Key.FirstName)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.Key.LastName)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.Key.Email)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => user.Key.EmailConfirmed)
+                </td>
+                <td class="text-center">
+                    <a href="#">Edit</a>
+                    <a asp-action="DeleteUser" asp-route-blogUserId="@user.Key.Id">Delete</a>
+                </td>
+                @foreach (var role in Enum.GetNames(typeof(BlogRole)))
+                {
+                    <td class="text-center">
+                        @if (user.Value.Exists(p => p.Name == role))
+                        {
+                            //delete
+                            <a asp-action="RemoveRole" asp-route-roleName="@role" asp-route-blogUserId="@user.Key.Id">
+                                <button class="btn rounded-pill btn-info">X</button>
+                            </a>
+                        }
+                        else
+                        {
+                            //add
+                            <a asp-action="AddRole" asp-route-roleName="@role" asp-route-blogUserId="@user.Key.Id">
+                                <button class="btn rounded-pill btn-info">+</button>
+                            </a>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    }
+
+    </tbody>
+</table>

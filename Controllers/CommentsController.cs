@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +18,7 @@ namespace JohnBlog.Controllers
         // GET: Comments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Comments.Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
+            var applicationDbContext = _context.Comments!.Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +30,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comments
+            var comment = await _context.Comments!
                 .Include(c => c.BlogUser)
                 .Include(c => c.Moderator)
                 .Include(c => c.Post)
@@ -83,7 +79,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments!.FindAsync(id);
             if (comment == null)
             {
                 return NotFound();
@@ -140,7 +136,7 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Comments
+            var comment = await _context.Comments!
                 .Include(c => c.BlogUser)
                 .Include(c => c.Moderator)
                 .Include(c => c.Post)
@@ -158,15 +154,15 @@ namespace JohnBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
-            _context.Comments.Remove(comment);
+            var comment = await _context.Comments!.FindAsync(id);
+            _context.Comments.Remove(comment!);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommentExists(int id)
         {
-            return _context.Comments.Any(e => e.Id == id);
+            return _context.Comments!.Any(e => e.Id == id);
         }
     }
 }

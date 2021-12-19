@@ -119,14 +119,28 @@ Implemented Prism.js
 Footer is cutting off bottom elements due to fixed-bottom, added a div with fixed height before (TODO: add fancy css to calculate space needed)
 Added delete to Post.Edit. Button/anchor must be outside of form otherwise form submit will occur
 Hiding posts that aren't ReadyStatus.Production unless logged in as the blog author
+Added edit link to Blog.Index
+	Setting Z-Index allows for clickable links in stretched-link cards
+Updated Blog.Edit to change Blog ownership via email select list (may need to make this a searchable item later)
+Added MailService
+	Done through gmail smtp (https://www.c-sharpcorner.com/blogs/send-email-using-gmail-smtp)
+	Added MimeKit, MailKit nuget
+	Having a real bad time with injecting the email service, mailsettings are getting implemented... forgot that views must use IOptions and retrieve corresponding value
+Updated registration page to include First/Last Name
+	Updated code behind to populate First/Last names for BlogUser creation
+Created Admin.GetRoles
+	Show all users, user details (email confirmed, roles assigned) currently injecting usermanager but should use a linq statement on dbcontext
+	Created linq statement to left join (twice) the roleId->RoleName into dictionary
+Created Admin.AddRole, Admin.DeleteRole by BlogUserId
+Created Admin.DeleteUser with confirmation page
 
 *******************************************************************************
 TODO:
 *******************************************************************************
+Cleanup old test users
+Tags with ajax autofill/autocomplete
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
-Make administrator able to assign blogs to user
-
 
 
 
@@ -134,4 +148,7 @@ Make administrator able to assign blogs to user
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Tried making an area for admin but routing keeps getting borked and views do not show asp-action etc for a links
+Add OAuth logins and registration
 Make a load more function for long list of posts (paging then render incrementally?)
+Make overflow background a different color
