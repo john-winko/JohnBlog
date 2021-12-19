@@ -36,5 +36,6 @@ namespace JohnBlog.Models
 
         public virtual ICollection<Blog>? Blogs { get; set; } = new List<Blog>();
         public virtual ICollection<Post>? Posts { get; set; } = new List<Post>();
+        
     }
 }

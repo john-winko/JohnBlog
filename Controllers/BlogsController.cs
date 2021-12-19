@@ -72,7 +72,7 @@ namespace JohnBlog.Controllers
             {
                 return NotFound();
             }
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", blog.BlogUserId);
+            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Email", blog.BlogUserId);
             return View(blog);
         }
 

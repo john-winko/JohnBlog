@@ -8,18 +8,23 @@
 <h1>Edit</h1>
 
 <h4>Blog</h4>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="BlogImage" />
-            
-            @Html.Hidden("BlogUserId", Model!.BlogUserId)
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="BlogImage"/>
+
+            @* @Html.Hidden("BlogUserId", Model!.BlogUserId) *@
+            <div class="form-group">
+                <label asp-for="BlogUserId" class="control-label"></label>
+                <select asp-for="BlogUserId" class="form-control" asp-items="ViewBag.BlogUserId"></select>
+                <span asp-validation-for="BlogUserId" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -29,19 +34,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="Created" class="control-label"></label>
-                <input asp-for="Created" class="form-control" />
+                <input asp-for="Created" class="form-control"/>
                 <span asp-validation-for="Created" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BlogImage" class="control-label"></label>
-                <input type="file" name="FormFile" class="form-control" />
+                <input type="file" name="FormFile" class="form-control"/>
                 <span asp-validation-for="BlogImage" class="text-danger"></span>
             </div>
             <div class="form-group mt-2 mb-2">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary"/>
                 <a asp-action="Delete" asp-route-id="@Model!.Id" class="btn btn-primary">Delete</a>
             </div>
-            
+
         </form>
     </div>
     <div class="col-md-4">
@@ -52,4 +57,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
