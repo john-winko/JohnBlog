@@ -133,11 +133,14 @@ Created Admin.GetRoles
 	Created linq statement to left join (twice) the roleId->RoleName into dictionary
 Created Admin.AddRole, Admin.DeleteRole by BlogUserId
 Created Admin.DeleteUser with confirmation page
-
+Added stylesheet link for bootstrap icons
+Post.Edit
+	Add javascript and form elements for tags add/delete
+	Must manually remove associated tags by PostId then add again when saving
 *******************************************************************************
 TODO:
 *******************************************************************************
-Cleanup old test users
+Add badges (new) for new content/posts/comments
 Tags with ajax autofill/autocomplete
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)

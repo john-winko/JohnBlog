@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,8 @@ using JohnBlog.Models;
 using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Razor.Language;
+using NuGet.Packaging;
 
 namespace JohnBlog.Controllers
 {
@@ -124,7 +127,9 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts!.FindAsync(id);
+            var post = await _context.Posts!
+                .Include(p=>p.Tags)
+                .FirstOrDefaultAsync(p=>p.Id == id);
             if (post == null)
             {
                 return NotFound();
@@ -141,30 +146,39 @@ namespace JohnBlog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("Id,BlogId,BlogUserId,Title,Abstract,Content,Created,Updated,ReadyStatus,Slug")] Post post)
+            [Bind("Id,BlogId,BlogUserId,Title,Abstract,Content,Created,Updated,ReadyStatus,Slug")] Post post, List<string> tagEntries)
         {
-            if (id != post.Id)
-            {
-                return NotFound();
-            }
+            if (id != post.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(post);
+                    var postUpdate = _context.Posts!
+                        .Include(p => p.Tags)
+                        .FirstOrDefault(p => p.Id == post.Id);
+                    postUpdate!.Updated = DateTime.Now;
+                    
+                    // Remove all tags 
+                    postUpdate.Tags.Clear();
+                    await _context.SaveChangesAsync();
+                    
+                    // then add tagEntries posted even if they are the same
+                    foreach (var tagEntry in tagEntries)
+                    {
+                        postUpdate.Tags.Add(new Tag()
+                        {
+                            PostId = post.Id,
+                            TagText = tagEntry
+                        });
+                    }
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!PostExists(post.Id)) return NotFound();
+                    throw;
                 }
 
                 return RedirectToAction(nameof(PostsByBlogIndex),new {blogId = post.BlogId});

@@ -40,18 +40,52 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <div class="input-group mb-3 col-6">
+                    <span class="input-group-text">#</span>
+                    <input type="text" class="form-control" placeholder="Tag Text" aria-label="Tag" id="TagEntry">
+                    <button type="button" class="btn btn-primary" onclick="AddTag()">
+                        <i class="bi bi-plus-circle"></i> Add
+                    </button>
+                </div>
+
+                <ul id="TagList" class="list-group list-group-horizontal">
+                    @foreach (var tag in Model!.Tags)
+                    {
+                        <li class="list-group-item">
+                            <button type="button" onclick="parentElement.remove();"><i class="bi bi-x-circle"></i></button>
+                            #@tag.TagText
+                            <input type='hidden' name='tagEntries[]' value='@tag.TagText'/>    
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary"/>
             </div>
         </form>
     </div>
     <a asp-action="PostsByBlogIndex" asp-route-blogId="@Model!.BlogId">Back to List</a>
 </div>
-<a asp-action="Delete" asp-route-Id="@Model!.Id"><button class="btn rounded-pill bg-warning">Delete</button></a>
+<a asp-action="Delete" asp-route-Id="@Model!.Id">
+    <button class="btn rounded-pill bg-warning">Delete</button>
+</a>
 
 @section Scripts
 {
+    
     <script type="text/javascript">
-  tinymce.init({
+        function AddTag() {
+            var tagEntry = document.getElementById("TagEntry");
+            let list = document.getElementById("TagList");
+            list.innerHTML += `
+        <li class="list-group-item">
+            <button type="button" onclick="parentElement.remove();"><i class="bi bi-x-circle"></i></button>
+            #${tagEntry.value}
+            <input type='hidden' name='tagEntries[]' value='${tagEntry.value}'/>    
+            </li>`;
+            tagEntry.value = "";
+        }
+        tinymce.init({
     selector: '#myTextarea',
     setup: function (editor){
         editor.on('init', function (e){
