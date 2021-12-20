@@ -138,7 +138,7 @@ Post.Edit
 	Add javascript and form elements for tags add/delete
 	Must manually remove associated tags by PostId then add again when saving
 Updated Post.Create to use same tag creation, Post.Details to show tags on right, Home.Index to show most common at top
-
+Added Posts.PostsByTag action (TODO: add more specific view later)
 *******************************************************************************
 TODO:
 *******************************************************************************
