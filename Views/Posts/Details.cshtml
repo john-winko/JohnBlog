@@ -13,6 +13,7 @@
     <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a>
 }
 <div class="row">
+    @*TODO: add responsive cols and left bar with share to social media icons*@
     <div class="col-9">@Html.Raw(Model!.Content)</div>
     <div class="col-3 text-center">
         <h2>@Model.Blog!.Name</h2>
@@ -39,6 +40,8 @@
 
     </div>
 </div>
+<hr/>
+<partial name="_CommentsByPost"/>
 <hr/>
 <div>
     <a asp-action="PostsByBlogIndex" asp-route-blogId="@Model!.BlogId">Back to List</a>
