@@ -47,17 +47,21 @@
                         <i class="bi bi-plus-circle"></i> Add
                     </button>
                 </div>
-
-                <ul id="TagList" class="list-group list-group-horizontal">
-                    @foreach (var tag in Model!.Tags)
-                    {
-                        <li class="list-group-item">
-                            <button type="button" onclick="parentElement.remove();"><i class="bi bi-x-circle"></i></button>
-                            #@tag.TagText
-                            <input type='hidden' name='tagEntries[]' value='@tag.TagText'/>    
-                        </li>
-                    }
-                </ul>
+                @* Make into a partial *@
+                <div class="form-group">
+                    <ul id="TagList" class="list-group list-group-horizontal">
+                        @foreach (var tag in Model!.Tags)
+                        {
+                            <li class="list-group-item">
+                                <button type="button" onclick="parentElement.remove();">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                                #@tag.TagText
+                                <input type='hidden' name='tagEntries[]' value='@tag.TagText'/>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary"/>
@@ -72,8 +76,9 @@
 
 @section Scripts
 {
-    
+
     <script type="text/javascript">
+    // TODO: split out into custom.js
         function AddTag() {
             var tagEntry = document.getElementById("TagEntry");
             let list = document.getElementById("TagList");
