@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JohnBlog.Data;
+using JohnBlog.Enums;
 using JohnBlog.Models;
 using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -47,6 +48,17 @@ namespace JohnBlog.Controllers
             return applicationDbContext.Any() ? View("Index",await applicationDbContext.ToListAsync()) : View("NoPosts");
         }
 
+        public async Task<IActionResult> PostsByTag(string tag)
+        {
+            // TODO: expand this further with its own view (show tag at top etc)
+            var applicationDbContext = _context.Posts!
+                .Include(p => p.Blog)
+                .Include(p => p.BlogUser)
+                .Where(p => p.Tags.Any(t=>t.TagText == tag))
+                .Where(p=>p.ReadyStatus == ReadyStatus.Production);
+            return applicationDbContext.Any() ? View("Index",await applicationDbContext.ToListAsync()) : View("NoPosts");
+        }
+        
         public IActionResult NoPosts()
         {
             return View();
@@ -59,6 +71,7 @@ namespace JohnBlog.Controllers
             var post = await _context.Posts!
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
+                .Include(p=>p.Tags)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
             
             if (post is null) return NotFound();

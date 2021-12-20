@@ -6,5 +6,5 @@ public class HomeVm
 {
     public IEnumerable<Blog>? Blogs { get; set; }
     public IEnumerable<Post>? Posts { get; set; }
-    // TODO: Add tags
+    public IEnumerable<string>? Tags { get; set; }
 }
