@@ -153,6 +153,7 @@ Implement more hardened security for authorization (people navigating directly t
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Verify all login request redirect to the page they came from (i.e. comments)
 Tried making an area for admin but routing keeps getting borked and views do not show asp-action etc for a links
 Add OAuth logins and registration
 Make a load more function for long list of posts (paging then render incrementally?)

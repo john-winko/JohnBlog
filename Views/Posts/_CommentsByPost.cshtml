@@ -1,0 +1,42 @@
+﻿@model Post
+
+<div>
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <form asp-action="Create" asp-controller="Comments" method="Post">
+            @Html.Hidden("PostId", Model!.Id)
+            @Html.Hidden("Slug", Model.Slug)
+            <div class="form-group m-2 text-center">
+                <label class="form-label fw-bold">Add Comment</label>
+                <textarea name="commentText" class="form-control" rows="3"></textarea>
+                <button type="submit" class="btn btn-dark btn-sm mt-1 w-100 bg-success">Submit</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details", "Posts", new {slug = Model!.Slug})" class="btn btn-dark btn-sm bg-warning">Login to add comments</a>
+    }
+    @if (Model!.Comments.Any())
+    {
+        foreach (var comment in Model.Comments)
+        {
+            <div class="row m-1 border border-secondary p-2 d-flex">
+                <div class="col-auto text-start small">
+                    <img src="@comment.BlogUser!.BlogImage" alt="Image" class="rounded-2" style="max-width: 40px;"/>
+                </div>
+                <div class="col">
+                    <span>@comment.BlogUser.FirstName @comment.BlogUser.LastName</span>
+                    <span>@comment.Created.ToString("d")</span>
+                    <p>@comment.CommentText</p>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No comments</p>
+    }
+</div>
+
+@*TODO: Add inheritance to comments (reply to etc)*@
