@@ -5,22 +5,29 @@
     ViewData["Title"] = "Details";
 }
 @{
-    var isAuthor = User.Identity!.IsAuthenticated && 
+    var isAuthor = User.Identity!.IsAuthenticated &&
                    Model!.BlogUserId == _userManager.GetUserId(User);
-}  
-    @if (isAuthor)
-    {
-        <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a>
-    }
+}
+@if (isAuthor)
+{
+    <a asp-action="Edit" asp-route-id="@Model!.Id">Edit</a>
+}
 <div class="row">
     <div class="col-9">@Html.Raw(Model!.Content)</div>
     <div class="col-3 text-center">
         <h2>@Model.Blog!.Name</h2>
-        <h5>Tags</h5>
-        <ul class="text-start">
-            <li class="d-inline-block rounded-pill bg-info p-2 mb-1">tag name here</li>
-            <li class="d-inline-block rounded-pill bg-info p-2 mb-1">tag name here</li>
-            <li class="d-inline-block rounded-pill bg-info p-2 mb-1">tag name here</li>
+
+        <ul>
+            @foreach (var tag in Model.Tags)
+            {
+                @* TODO: add fancy styling; hover effect, link to posts by tag*@
+                <a asp-controller="Posts" asp-action="PostsByTag" asp-route-tag="@tag.TagText">
+                    <li class="d-inline-block rounded-pill bg-info p-2 mb-1"
+                        style="text-align:center;min-width: 5rem;">
+                        #@tag.TagText
+                    </li>
+                </a>
+            }
         </ul>
         <hr/>
         <h5>About the Author</h5>
@@ -35,7 +42,7 @@
                 @Model.BlogUser.Blurb
             </p>
         </div>
-        
+
     </div>
 </div>
 <hr/>
