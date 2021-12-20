@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +7,6 @@ using JohnBlog.Models;
 using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Razor.Language;
-using NuGet.Packaging;
 
 namespace JohnBlog.Controllers
 {
