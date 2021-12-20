@@ -121,7 +121,7 @@ namespace JohnBlog.Controllers
                 
                 foreach (var tagEntry in tagEntries)
                 {
-                    post.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry});
+                    post.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry.ToUpper()});
                 }
                 
                 _context.Add(post);
@@ -180,7 +180,7 @@ namespace JohnBlog.Controllers
                     // then add tagEntries posted even if they are the same
                     foreach (var tagEntry in tagEntries)
                     {
-                        postUpdate.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry});
+                        postUpdate.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry.ToUpper()});
                     }
                     
                     await _context.SaveChangesAsync();
