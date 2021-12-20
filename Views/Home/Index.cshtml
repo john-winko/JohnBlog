@@ -8,19 +8,16 @@
     <hr/>
     <h1 class="display-4">John's Blogs</h1>
     <h3>Observations, Advice, Tutorials</h3>
-    @*************************************************@
-    @* TODO: Add tags*@
-    @*************************************************@
-    @* <div> *@
-    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
-    @*     <a href="#" class="btn btn-outline-2">Long Tag 1</a> *@
-    @*     <a href="#" class="btn btn-outline-2">Even Longer Tag 1</a> *@
-    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
-    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
-    @*     <a href="#" class="btn btn-outline-2">Tag 1</a> *@
-    @* </div> *@
+    <div>
+        @foreach (var tag in Model!.Tags!)
+        {
+            <a asp-controller="Posts" asp-action="PostsByTag" asp-route-tag="@tag" class="btn btn-outline-2">@tag</a>    
+        }
+
+    </div>
     <hr/>
 
+    @* TODO: Make a carousel and take top 5? *@
     @await Html.PartialAsync("~/Views/Blogs/Index.cshtml", Model!.Blogs)
 
     <hr/>

@@ -35,7 +35,13 @@ namespace JohnBlog.Controllers
                    .OrderByDescending(p=> p.Created)
                    .Take(3)
                    .Include(b=>b.Blog)
-                   .ToList()
+                   .ToList(),
+               Tags = _context.Tags!
+                   .GroupBy(t=>t.TagText)
+                   .OrderByDescending(tot =>tot.Count())
+                   .Take(8)
+                   .Select(t=>t.Key)
+                   .ToList()!
             };
             return View(homeVm);
         }

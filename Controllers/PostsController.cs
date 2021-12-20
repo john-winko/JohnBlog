@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JohnBlog.Data;
+using JohnBlog.Enums;
 using JohnBlog.Models;
 using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -44,6 +45,17 @@ namespace JohnBlog.Controllers
             return applicationDbContext.Any() ? View("Index",await applicationDbContext.ToListAsync()) : View("NoPosts");
         }
 
+        public async Task<IActionResult> PostsByTag(string tag)
+        {
+            // TODO: expand this further with its own view (show tag at top etc)
+            var applicationDbContext = _context.Posts!
+                .Include(p => p.Blog)
+                .Include(p => p.BlogUser)
+                .Where(p => p.Tags.Any(t=>t.TagText == tag))
+                .Where(p=>p.ReadyStatus == ReadyStatus.Production);
+            return applicationDbContext.Any() ? View("Index",await applicationDbContext.ToListAsync()) : View("NoPosts");
+        }
+        
         public IActionResult NoPosts()
         {
             return View();
@@ -56,6 +68,7 @@ namespace JohnBlog.Controllers
             var post = await _context.Posts!
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
+                .Include(p=>p.Tags)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
             
             if (post is null) return NotFound();
@@ -85,7 +98,7 @@ namespace JohnBlog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,BlogUserId,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile? formFile)
+            [Bind("Id,BlogUserId,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile? formFile, List<string> tagEntries)
         {
             if (ModelState.IsValid)
             {
@@ -94,19 +107,20 @@ namespace JohnBlog.Controllers
                 post.BlogImage = await formFile.ToDbString() ?? post.BlogImage;
 
                 var slug = _slugService.GenerateUrlSlug(post.Title);
+                
                 // Error check slug before adding
                 if (string.IsNullOrEmpty(slug)) ModelState.AddModelError("", "Slug generated was empty");
                 if (!_slugService.IsUnique(slug))
                     ModelState.AddModelError("Title", "Same title already exists for a post");
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid) return View(post);
+                
+                post.Slug = slug;
+                
+                foreach (var tagEntry in tagEntries)
                 {
-                    post.Slug = slug;
+                    post.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry.ToUpper()});
                 }
-                else
-                {
-                    return View(post);
-                }
-
+                
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -124,7 +138,9 @@ namespace JohnBlog.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts!.FindAsync(id);
+            var post = await _context.Posts!
+                .Include(p=>p.Tags)
+                .FirstOrDefaultAsync(p=>p.Id == id);
             if (post == null)
             {
                 return NotFound();
@@ -141,30 +157,35 @@ namespace JohnBlog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("Id,BlogId,BlogUserId,Title,Abstract,Content,Created,Updated,ReadyStatus,Slug")] Post post)
+            [Bind("Id,BlogId,BlogUserId,Title,Abstract,Content,Created,Updated,ReadyStatus,Slug")] Post post, List<string> tagEntries)
         {
-            if (id != post.Id)
-            {
-                return NotFound();
-            }
+            if (id != post.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(post);
+                    var postUpdate = _context.Posts!
+                        .Include(p => p.Tags)
+                        .FirstOrDefault(p => p.Id == post.Id);
+                    postUpdate!.Updated = DateTime.Now;
+                    
+                    // Remove all tags 
+                    postUpdate.Tags.Clear();
+                    await _context.SaveChangesAsync();
+                    
+                    // then add tagEntries posted even if they are the same
+                    foreach (var tagEntry in tagEntries)
+                    {
+                        postUpdate.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry.ToUpper()});
+                    }
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!PostExists(post.Id)) return NotFound();
+                    throw;
                 }
 
                 return RedirectToAction(nameof(PostsByBlogIndex),new {blogId = post.BlogId});
