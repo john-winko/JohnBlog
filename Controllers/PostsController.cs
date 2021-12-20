@@ -88,7 +88,7 @@ namespace JohnBlog.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("Id,BlogUserId,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile? formFile)
+            [Bind("Id,BlogUserId,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile? formFile, List<string> tagEntries)
         {
             if (ModelState.IsValid)
             {
@@ -97,19 +97,20 @@ namespace JohnBlog.Controllers
                 post.BlogImage = await formFile.ToDbString() ?? post.BlogImage;
 
                 var slug = _slugService.GenerateUrlSlug(post.Title);
+                
                 // Error check slug before adding
                 if (string.IsNullOrEmpty(slug)) ModelState.AddModelError("", "Slug generated was empty");
                 if (!_slugService.IsUnique(slug))
                     ModelState.AddModelError("Title", "Same title already exists for a post");
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid) return View(post);
+                
+                post.Slug = slug;
+                
+                foreach (var tagEntry in tagEntries)
                 {
-                    post.Slug = slug;
+                    post.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry});
                 }
-                else
-                {
-                    return View(post);
-                }
-
+                
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -166,11 +167,7 @@ namespace JohnBlog.Controllers
                     // then add tagEntries posted even if they are the same
                     foreach (var tagEntry in tagEntries)
                     {
-                        postUpdate.Tags.Add(new Tag()
-                        {
-                            PostId = post.Id,
-                            TagText = tagEntry
-                        });
+                        postUpdate.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry});
                     }
                     
                     await _context.SaveChangesAsync();
