@@ -144,7 +144,9 @@ Post.Details
 	Updated Comments.Edit and Comments.Moderate actions
 	Added buttons for edit/moderate/delete on comments when logged in with appropriate permissions
 	Added Comments.MarkForDeletion action
-
+Updated .gitignore to exclude appsettings.json and purged the file from prior commits
+Exported all tables to csv and put into data folder
+	Updated each files properties to copy to build directory
 *******************************************************************************
 TODO:
 *******************************************************************************
