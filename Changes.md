@@ -139,6 +139,12 @@ Post.Edit
 	Must manually remove associated tags by PostId then add again when saving
 Updated Post.Create to use same tag creation, Post.Details to show tags on right, Home.Index to show most common at top
 Added Posts.PostsByTag action (TODO: add more specific view later)
+Post.Details
+	Added partial view for comments
+	Updated Comments.Edit and Comments.Moderate actions
+	Added buttons for edit/moderate/delete on comments when logged in with appropriate permissions
+	Added Comments.MarkForDeletion action
+
 *******************************************************************************
 TODO:
 *******************************************************************************
@@ -146,13 +152,18 @@ Add badges (new) for new content/posts/comments
 Tags with ajax autofill/autocomplete
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
-
-
+Make a separate view for authors to see drafts / create posts
+Make a separate view to moderate comments by newest
+Code review
+	Make sure to only show posts in production status
+	Move custom inline styles to stylesheet
 
 
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Save profile photos of different sizes (with a max size); Full size, side bar, icon sizes
+Verify all login request redirect to the page they came from (i.e. comments)
 Tried making an area for admin but routing keeps getting borked and views do not show asp-action etc for a links
 Add OAuth logins and registration
 Make a load more function for long list of posts (paging then render incrementally?)

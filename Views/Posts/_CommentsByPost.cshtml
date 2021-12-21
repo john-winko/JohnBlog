@@ -1,0 +1,41 @@
+﻿@model Post
+
+<div id="commentsSection" class="m-3">
+    <div>
+        <span>@Model!.Comments.Count Comments</span>
+    </div>
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <form asp-action="Create" asp-controller="Comments" method="Post">
+            @Html.Hidden("PostId", Model!.Id)
+            @Html.Hidden("Slug", Model.Slug)
+            <div class="form-group m-2 text-center">
+                <label class="form-label fw-bold">Add Comment</label>
+                <textarea name="commentText" class="form-control" rows="3"></textarea>
+                <button type="submit" class="btn btn-dark btn-sm mt-1 w-100 bg-success">Submit</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <a asp-area="Identity" asp-page="/Account/Login"
+           asp-route-returnUrl="@Url.Action("Details", "Posts", new {slug = Model!.Slug})"
+           class="btn btn-dark btn-sm bg-warning w-100">
+            Login to add comments
+        </a>
+    }
+    @if (Model!.Comments.Any())
+    {
+        foreach (var comment in Model.Comments)
+        {
+            <partial name="_CommentBody" model="@comment"></partial>
+            <partial name="_CommentsModerationModal" model="@comment"/>
+        }
+    }
+    else
+    {
+        <p>No comments</p>
+    }
+</div>
+
+@*TODO: Add inheritance to comments (reply to etc)*@

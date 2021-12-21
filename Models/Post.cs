@@ -48,5 +48,8 @@ namespace JohnBlog.Models
 
         public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
         public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+        
+        // TODO: Add for future
+        // public bool IsCommentsLocked { get; set; }
     }
 }
