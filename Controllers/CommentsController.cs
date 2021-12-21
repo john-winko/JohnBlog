@@ -120,13 +120,13 @@ namespace JohnBlog.Controllers
             var updateComment = await _context.Comments!
                 .Include(c => c.Post)
                 .FirstOrDefaultAsync(c => c.Id == comment.Id);
-            
+
             if (updateComment?.Post is null) return NotFound();
             try
             {
                 updateComment.CommentText = comment.CommentText;
                 updateComment.Updated = DateTime.Now;
-                
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -134,12 +134,13 @@ namespace JohnBlog.Controllers
                 if (!CommentExists(comment.Id)) return NotFound();
             }
 
-            return RedirectToAction("Details", "Posts", new {slug = updateComment.Post.Slug},"commentsSection");
+            return RedirectToAction("Details", "Posts", new {slug = updateComment.Post.Slug}, "commentsSection");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Moderate(int id, [Bind("Id,CommentText,ModeratedBody,ModerationType")] Comment comment)
+        public async Task<IActionResult> Moderate(int id,
+            [Bind("Id,CommentText,ModeratedBody,ModerationType")] Comment comment)
         {
             if (id != comment.Id) return NotFound();
             if (!ModelState.IsValid) return Problem("Comment.Moderate ModelState is not valid");
@@ -162,6 +163,27 @@ namespace JohnBlog.Controllers
             }
 
             return RedirectToAction("Details", "Posts", new {slug = updateComment.Post.Slug}, "commentsSection");
+        }
+
+        public async Task<IActionResult> MarkForDeletion(int? id, bool mark = true)
+        {
+            if (id is null) return NotFound();
+            var comment = await _context.Comments!
+                .Include(c => c.Post)
+                .FirstOrDefaultAsync(c => c.Id == id);
+            if (comment?.Post is null) return NotFound();
+            
+            try
+            {
+                comment.IsMarkedForDelete = mark;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CommentExists(comment.Id)) return NotFound();
+            }
+
+            return RedirectToAction("Details", "Posts", new {slug = comment.Post.Slug}, "commentsSection");
         }
 
         // GET: Comments/Delete/5

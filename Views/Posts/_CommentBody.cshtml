@@ -1,0 +1,55 @@
+﻿@using JohnBlog.Enums
+@using Microsoft.AspNetCore.Identity
+@model Comment
+@inject UserManager<BlogUser> _userManager
+
+<div class="row m-1 border border-secondary p-2 d-flex">
+                <div class="col-auto text-start small">
+                    <img src="@Model!.BlogUser!.BlogImage" alt="Image" class="rounded-2" style="max-width: 40px;"/>
+                </div>
+                <div class="col">
+                    <span>@Model.BlogUser.FirstName @Model.BlogUser.LastName</span>
+                    <span>@Model.Created.ToString("d")</span>
+                    @if (@Model.IsModerated)
+                    {
+                        <span>Moderated by @Model.Moderator!.FirstName @Model.Moderator.LastName for @Model.ModerationType.ToString()</span>
+                        <p>@Model.ModeratedBody</p>
+                    }
+                    else if (@Model.IsMarkedForDelete)
+                    {
+                        <p>Comment marked for deletion</p>
+                    }
+                    else
+                    {
+                        <p>@Model.CommentText</p>
+                    }
+                </div>
+                
+                @****************************************************************
+                Edit/Moderate/Delete
+                *****************************************************************@
+                @if (!@Model.IsModerated && !@Model.IsMarkedForDelete && @Model.BlogUserId == _userManager.GetUserId(User))
+                {
+                    <div class="col-1">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#editModal_@Model.Id" class="btn btn-sm btn-danger">EDIT</button>
+                    </div>
+                }
+                @if (User.IsInRole(BlogRole.Moderator.ToString()))
+                {
+                    <div class="col-1">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#moderate_@Model.Id" class="btn btn-sm btn-danger mb-2">MODERATE</button>
+                        <form asp-action="MarkForDeletion" asp-controller="Comments" asp-route-id="@Model.Id">
+                            @if (Model.IsMarkedForDelete)
+                            {
+                                @Html.Hidden("Mark", false)
+                                <button type="submit" class="btn btn-sm btn-danger">UN-DELETE</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-sm btn-danger">DELETE</button>
+                            }
+                            
+                        </form>
+                    </div>
+                }
+            </div>
