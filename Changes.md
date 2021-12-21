@@ -143,6 +143,7 @@ Post.Details
 	Added partial view for comments
 	Updated Comments.Edit and Comments.Moderate actions
 	Added buttons for edit/moderate/delete on comments when logged in with appropriate permissions
+	Added Comments.MarkForDeletion action
 
 *******************************************************************************
 TODO:
