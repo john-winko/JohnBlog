@@ -16,7 +16,7 @@ namespace JohnBlog.Services
             _dbContext = dbContext;
         }
 
-        public async Task SeedDatabaseAsync(bool reset = true)
+        public async Task SeedDatabaseAsync(bool reset = false)
         {
             if (reset) await _dbContext.Database.EnsureDeletedAsync();
 

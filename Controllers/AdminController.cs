@@ -101,4 +101,10 @@ public class AdminController : Controller
         await _userManager.DeleteAsync(user);
         return RedirectToAction("GetRoles");
     }
+
+    public IActionResult XmlFiles()
+    {
+        var s = Directory.EnumerateFiles("Data/SampleBlog/");
+        return View(s);
+    }
 }

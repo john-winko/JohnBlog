@@ -150,6 +150,8 @@ Exported all tables to csv and put into data folder
 Dumped using CSV since commas in the Post.Content was unable to be parsed
 	Switched to using XML serialization
 	Saved a copy of all tables and did a test seed successfully
+Admin.XmlFiles
+	Structuring to show which files exist in the Data/SampleBlog folder
 
 *******************************************************************************
 TODO:
@@ -163,6 +165,9 @@ Make a separate view to moderate comments by newest
 Code review
 	Make sure to only show posts in production status
 	Move custom inline styles to stylesheet
+Change colors and make plus into checkmark for Admin.GetUsersByRole
+Add functionality to reset everything except for what is posted/edited/added by me or mods
+Add download/upload of zip folders with all files for backup
 
 
 *******************************************************************************
