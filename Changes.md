@@ -147,6 +147,10 @@ Post.Details
 Updated .gitignore to exclude appsettings.json and purged the file from prior commits
 Exported all tables to csv and put into data folder
 	Updated each files properties to copy to build directory
+Dumped using CSV since commas in the Post.Content was unable to be parsed
+	Switched to using XML serialization
+	Saved a copy of all tables and did a test seed successfully
+
 *******************************************************************************
 TODO:
 *******************************************************************************

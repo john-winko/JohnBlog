@@ -1,6 +1,7 @@
 ﻿using JohnBlog.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace JohnBlog.Models
 {
@@ -43,10 +44,13 @@ namespace JohnBlog.Models
         public string? BlogImage { get; set; }
 
         // Navigation properties
+        [XmlIgnore]
         public virtual Blog? Blog { get; set; }
+        [XmlIgnore]
         public virtual BlogUser? BlogUser { get; set; }
-
+        [XmlIgnore]
         public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
+        [XmlIgnore]
         public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         
         // TODO: Add for future
