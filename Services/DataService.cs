@@ -34,28 +34,28 @@ namespace JohnBlog.Services
             }
         }
 
-        private async Task LoadAllXml()
+        public async Task LoadAllXml()
         {
-            _dbContext.AddRange(LoadFromXml<List<BlogUser>>());
-            _dbContext.AddRange(LoadFromXml<List<IdentityRole>>());
-            _dbContext.AddRange(LoadFromXml<List<IdentityUserRole<string>>>());
-            _dbContext.AddRange(LoadFromXml<List<Blog>>());
-            _dbContext.AddRange(LoadFromXml<List<Post>>());
-            _dbContext.AddRange(LoadFromXml<List<Comment>>());
-            _dbContext.AddRange(LoadFromXml<List<Tag>>());
+            await _dbContext.AddRangeAsync(LoadFromXml<List<BlogUser>>());
+            await _dbContext.AddRangeAsync(LoadFromXml<List<IdentityRole>>());
+            await _dbContext.AddRangeAsync(LoadFromXml<List<IdentityUserRole<string>>>());
+            await _dbContext.AddRangeAsync(LoadFromXml<List<Blog>>());
+            await _dbContext.AddRangeAsync(LoadFromXml<List<Post>>());
+            await _dbContext.AddRangeAsync(LoadFromXml<List<Comment>>());
+            await _dbContext.AddRangeAsync(LoadFromXml<List<Tag>>());
             
             await _dbContext.SaveChangesAsync();
         }
 
-        public void SaveAllXml()
+        public async Task SaveAllXml()
         {
-            SaveToXml(_dbContext.UserRoles!.ToList());
-            SaveToXml(_dbContext.Roles!.ToList());
-            SaveToXml(_dbContext.Users!.ToList());
-            SaveToXml(_dbContext.Blogs!.ToList());
-            SaveToXml(_dbContext.Comments!.ToList());
-            SaveToXml(_dbContext.Tags!.ToList());
-            SaveToXml(_dbContext.Posts!.ToList());
+            SaveToXml(await _dbContext.UserRoles!.ToListAsync());
+            SaveToXml(await _dbContext.Roles!.ToListAsync());
+            SaveToXml(await _dbContext.Users!.ToListAsync());
+            SaveToXml(await _dbContext.Blogs!.ToListAsync());
+            SaveToXml(await _dbContext.Comments!.ToListAsync());
+            SaveToXml(await _dbContext.Tags!.ToListAsync());
+            SaveToXml(await _dbContext.Posts!.ToListAsync());
         }
         
         public void SaveToXml<T>(T obj)
