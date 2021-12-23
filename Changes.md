@@ -175,6 +175,9 @@ Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
 Make a separate view for authors to see drafts / create posts
 Make a separate view to moderate comments by newest
+Assign viewership
+	Guest can only see Production ready posts
+	Viewers can see previews
 Code review
 	Make sure to only show posts in production status
 	Move custom inline styles to stylesheet
