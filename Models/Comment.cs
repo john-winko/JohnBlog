@@ -1,6 +1,7 @@
 ﻿using JohnBlog.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace JohnBlog.Models
 {
@@ -32,8 +33,11 @@ namespace JohnBlog.Models
 
         public ModerationType ModerationType { get; set; }
 
+        [XmlIgnore]
         public virtual Post? Post { get; set; }
-        public virtual BlogUser? BlogUser { get; set; }  
+        [XmlIgnore]
+        public virtual BlogUser? BlogUser { get; set; }
+        [XmlIgnore]
         public virtual BlogUser? Moderator { get; set; }
     }
 }

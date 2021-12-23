@@ -56,6 +56,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="GetRoles">Users</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="XmlFiles">Files</a>
+                        </li>
                     }
                     @if (User.IsInRole(BlogRole.Author.ToString()))
                     {
