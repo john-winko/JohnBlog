@@ -48,7 +48,7 @@
                         <i class="bi bi-plus-circle"></i> Add
                     </button>
                 </div>
-                <div>
+                <div>@*TODO: cleanup the look and feel of tag elements*@
                     <ul id="TagList" class="list-group list-group-horizontal"></ul>
                 </div>
             </div>
@@ -92,7 +92,7 @@
     setup: function (editor){
         editor.on('change', function (e){            
             document.getElementById("FormattedContent").innerHTML = tinymce.get("myTextarea").getContent();
-            document.getElementById("UnformattedContent").innerHTML = tinymce.get("myTextarea").getContent({format:'text'});
+            document.getElementById("UnformattedContent").innerHTML = tinymce.get("myTextarea").getContent({format:'text'}).substring(0,199);
             });
         },
     // width: 100,
