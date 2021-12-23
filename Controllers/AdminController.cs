@@ -83,7 +83,7 @@ public class AdminController : Controller
         if (blogUserId is null || roleName is null) return NotFound();
 
         var user = await _userManager.FindByIdAsync(blogUserId);
-        var s = await _userManager.AddToRoleAsync(user, roleName);
+        /*var s =*/ await _userManager.AddToRoleAsync(user, roleName);
 
         return RedirectToAction("GetRoles");
     }
@@ -118,7 +118,7 @@ public class AdminController : Controller
         var formFile = xmlFileModel.FormFile;
         if (formFile is null) return View("XmlFiles");
         var fileUploadPath = Directory.GetCurrentDirectory() + $"/Data/SampleBlog/{formFile.FileName}";
-        using var fileStream = new FileStream(fileUploadPath, FileMode.OpenOrCreate);
+        await using var fileStream = new FileStream(fileUploadPath, FileMode.OpenOrCreate);
         await formFile.CopyToAsync(fileStream);
 
         return RedirectToAction("XmlFiles");
@@ -138,9 +138,13 @@ public class AdminController : Controller
 
     public class XmlFileModel
     {
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once PropertyCanBeMadeInitOnly.Global
         public List<FileInfo>? FileInfos { get; set; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public IFormFile? FormFile { get; set; }
 
+        // ReSharper disable once EmptyConstructor
         public XmlFileModel()
         {
         }
