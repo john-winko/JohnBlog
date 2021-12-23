@@ -18,12 +18,19 @@
     <hr/>
 
     @* TODO: Make a carousel and take top 5? *@
-    @await Html.PartialAsync("~/Views/Blogs/Index.cshtml", Model!.Blogs)
+    @if (Model.Blogs!.Any())
+    {
+        @await Html.PartialAsync("~/Views/Blogs/Index.cshtml", Model.Blogs)
+    }
 
     <hr/>
     <h1>Recent Posts</h1>
     <hr/>
     <div class="mb-5">
-        @await Html.PartialAsync("~/Views/Posts/Index.cshtml", Model!.Posts)
+            @if (Model.Posts!.Any())
+            {
+                @await Html.PartialAsync("~/Views/Posts/Index.cshtml", Model.Posts) 
+            }
+        
     </div>
 </div>

@@ -231,9 +231,14 @@ namespace JohnBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var post = await _context.Posts!.FindAsync(id);
-            _context.Posts.Remove(post!);
+            var comments = _context.Comments!.Where(p => p.PostId == id);
+            _context.Comments!.RemoveRange(comments);
             await _context.SaveChangesAsync();
+            
+            var post = await _context.Posts!.FindAsync(id);
+            _context.Posts!.Remove(post!);
+            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
