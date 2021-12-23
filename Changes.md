@@ -185,7 +185,7 @@ Add download/upload of zip folders with all files for backup
 *******************************************************************************
 Way Later:
 *******************************************************************************
-
+Filter down selection list to those assigned as an author for Blog.Edit
 When changing the author for a blog, posts aren't updated 
 	They can't edit even though the they now own the blog 
 	Prior posts were done by new author so need to figure out how to better handle "change of command"
