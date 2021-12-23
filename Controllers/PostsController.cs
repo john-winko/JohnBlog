@@ -179,7 +179,8 @@ namespace JohnBlog.Controllers
                         .Include(p => p.Tags)
                         .FirstOrDefault(p => p.Id == post.Id);
                     postUpdate!.Updated = DateTime.Now;
-
+                    postUpdate.ReadyStatus = post.ReadyStatus;
+                    
                     // Remove all tags 
                     postUpdate.Tags.Clear();
                     await _context.SaveChangesAsync();

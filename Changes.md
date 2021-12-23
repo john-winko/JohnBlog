@@ -195,6 +195,7 @@ When changing the author for a blog, posts aren't updated
 	Add conditional elements for administrator to edit?
 Add pinning from administator on which blogs to show first on home page
 Save profile photos of different sizes (with a max size); Full size, side bar, icon sizes
+Posts.Index toggle between cards/table views by user selection
 Verify all login request redirect to the page they came from (i.e. comments)
 Tried making an area for admin but routing keeps getting borked and views do not show asp-action etc for a links
 Add OAuth logins and registration
