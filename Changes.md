@@ -147,10 +147,29 @@ Post.Details
 Updated .gitignore to exclude appsettings.json and purged the file from prior commits
 Exported all tables to csv and put into data folder
 	Updated each files properties to copy to build directory
+Dumped using CSV since commas in the Post.Content was unable to be parsed
+	Switched to using XML serialization
+	Saved a copy of all tables and did a test seed successfully
+Admin.XmlFiles
+	Structuring to show which files exist in the Data/SampleBlog folder
+	Added generate xml files using dataservice
+	Added reset database using listed files
+Added Users
+	Blogger -> Craig McKay (Food Reviews, Nature and Earth, Video Games)
+	Moderator -> Matheus Ferrero
+	Guests Ben Parker, Jurica Koletic, Julian Wan
+	Updated the John.Winko account, assigned to Information Technology and The Blog Project
+Got an error page when deleting a post that had comments on it
+	Tags are properly cascaded on delete?
+	Updated Post.DeleteConfirmed to remove comments, save then remove Post
+Null reference error when no posts
+	Updated Home.Index to only show partial view if Posts.Any()
+
 *******************************************************************************
 TODO:
 *******************************************************************************
 Add badges (new) for new content/posts/comments
+Updated registration page for confirmation since we have a registered email sender now
 Tags with ajax autofill/autocomplete
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
@@ -159,11 +178,19 @@ Make a separate view to moderate comments by newest
 Code review
 	Make sure to only show posts in production status
 	Move custom inline styles to stylesheet
+Change colors and make plus into checkmark for Admin.GetUsersByRole
+Add download/upload of zip folders with all files for backup
 
 
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Filter down selection list to those assigned as an author for Blog.Edit
+When changing the author for a blog, posts aren't updated 
+	They can't edit even though the they now own the blog 
+	Prior posts were done by new author so need to figure out how to better handle "change of command"
+	Add conditional elements for administrator to edit?
+Add pinning from administator on which blogs to show first on home page
 Save profile photos of different sizes (with a max size); Full size, side bar, icon sizes
 Verify all login request redirect to the page they came from (i.e. comments)
 Tried making an area for admin but routing keeps getting borked and views do not show asp-action etc for a links

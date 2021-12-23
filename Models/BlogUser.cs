@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace JohnBlog.Models
 {
@@ -34,7 +35,9 @@ namespace JohnBlog.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at most {1} characters long.", MinimumLength = 2)]
         public string? LinkedInUrl { get; set; }
 
+        [XmlIgnore]
         public virtual ICollection<Blog>? Blogs { get; set; } = new List<Blog>();
+        [XmlIgnore]
         public virtual ICollection<Post>? Posts { get; set; } = new List<Post>();
         
     }

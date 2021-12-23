@@ -1,29 +1,32 @@
 ﻿using JohnBlog.Data;
 using JohnBlog.Models;
+using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JohnBlog.Controllers;
 
+// TODO: use custom attribute editor
+[Authorize(Roles = "Administrator")]
 public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<BlogUser> _userManager;
+    private readonly DataService _dataService;
 
-    public AdminController(ApplicationDbContext context, UserManager<BlogUser> userManager)
+    public AdminController(ApplicationDbContext context, UserManager<BlogUser> userManager, DataService dataService)
     {
         _context = context;
         _userManager = userManager;
+        _dataService = dataService;
     }
 
     // GET
-    // TODO: use custom attribute editor
-    [Authorize(Roles = "Administrator")]
     public IActionResult GetRoles()
     {
         var users = GetBlogUsersWithRoles();
-        
+
         return View(users);
     }
 
@@ -44,7 +47,7 @@ public class AdminController : Controller
                 x => _context.Roles.Where(role => role.Id == x.RoleMapEntry.RoleId).DefaultIfEmpty(),
                 (x, role) => new {x.User, Role = role})
             // runs the queries and sends us back into EF Core LINQ world
-            .ToList() 
+            .ToList()
             .Aggregate(
                 // seed
                 new Dictionary<BlogUser, List<IdentityRole>>(),
@@ -58,6 +61,7 @@ public class AdminController : Controller
                     {
                         blogUser[roles.User].Add(roles.Role);
                     }
+
                     return blogUser;
                 },
                 // result
@@ -79,7 +83,7 @@ public class AdminController : Controller
         if (blogUserId is null || roleName is null) return NotFound();
 
         var user = await _userManager.FindByIdAsync(blogUserId);
-        var s = await _userManager.AddToRoleAsync(user, roleName);
+        /*var s =*/ await _userManager.AddToRoleAsync(user, roleName);
 
         return RedirectToAction("GetRoles");
     }
@@ -100,5 +104,60 @@ public class AdminController : Controller
         var user = await _userManager.FindByIdAsync(id);
         await _userManager.DeleteAsync(user);
         return RedirectToAction("GetRoles");
+    }
+
+    public IActionResult XmlFiles()
+    {
+        return View(XmlFileModel.Populate("/Data/SampleBlog/"));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> XmlFiles([Bind("FileNames,FileInfos,FormFile")] XmlFileModel xmlFileModel)
+    {
+        var formFile = xmlFileModel.FormFile;
+        if (formFile is null) return View("XmlFiles");
+        var fileUploadPath = Directory.GetCurrentDirectory() + $"/Data/SampleBlog/{formFile.FileName}";
+        await using var fileStream = new FileStream(fileUploadPath, FileMode.OpenOrCreate);
+        await formFile.CopyToAsync(fileStream);
+
+        return RedirectToAction("XmlFiles");
+    }
+
+    public async Task<IActionResult> GenerateXmlFiles()
+    {
+        await _dataService.SaveAllXml();
+        return RedirectToAction("XmlFiles");
+    }
+
+    public async Task<IActionResult> LoadXmlFiles()
+    {
+        await _dataService.SeedDatabaseAsync(true);
+        return RedirectToAction("XmlFiles");
+    }
+
+    public class XmlFileModel
+    {
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once PropertyCanBeMadeInitOnly.Global
+        public List<FileInfo>? FileInfos { get; set; }
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public IFormFile? FormFile { get; set; }
+
+        // ReSharper disable once EmptyConstructor
+        public XmlFileModel()
+        {
+        }
+
+        public static XmlFileModel Populate(string directory)
+        {
+            var xmlFileModel = new XmlFileModel {FileInfos = new List<FileInfo>()};
+            foreach (var file in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + directory))
+            {
+                xmlFileModel.FileInfos.Add(new FileInfo(file));
+            }
+
+            return xmlFileModel;
+        }
     }
 }

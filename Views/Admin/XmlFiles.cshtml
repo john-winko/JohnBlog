@@ -1,0 +1,25 @@
+﻿@model JohnBlog.Controllers.AdminController.XmlFileModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<a asp-action="GenerateXmlFiles" asp-controller="Admin">Generate Files</a>
+<a asp-action="LoadXmlFiles" asp-controller="Admin">Reset Database</a>
+<hr/>
+@*TODO: make it prettier *@
+<form enctype="multipart/form-data" asp-action="XmlFiles" asp-controller="Admin" method="post">
+    @Html.Hidden("FileInfos", Model!.FileInfos)
+    <ul>
+        @foreach (var s in Model!.FileInfos!)
+        {
+            <li>
+                @s.Name, @s.LastWriteTime.ToString("f")
+            </li>
+        }
+    </ul>
+    <input type="file" asp-for="FormFile" name="FormFile" class="form-control"/>
+    <label asp-for="FormFile" class="form-label">Select File</label>
+    <button type="submit">Upload</button>
+</form>

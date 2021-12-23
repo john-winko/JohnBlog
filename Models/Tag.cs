@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace JohnBlog.Models
 {
@@ -11,6 +12,8 @@ namespace JohnBlog.Models
         [StringLength(25, ErrorMessage = "The {0} must be between {1} and {2} characters long", MinimumLength = 2)]
         [Display(Name ="Tag")]
         public string? TagText { get; set; }
+        
+        [XmlIgnore]
         public virtual Post? Post { get; set; }
 
     }

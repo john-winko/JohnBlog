@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace JohnBlog.Models
 {
@@ -32,7 +33,9 @@ namespace JohnBlog.Models
         // public IFormFile? NewImage { get; set; }
         
         [Display(Name = "Author")]
-        public virtual BlogUser? BlogUser { get; set; } 
+        [XmlIgnore]
+        public virtual BlogUser? BlogUser { get; set; }
+        [XmlIgnore]
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
     }
 }
