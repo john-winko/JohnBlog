@@ -108,7 +108,7 @@ public class AdminController : Controller
 
     public IActionResult XmlFiles()
     {
-        return View(XmlFileModel.Populate("Data/SampleBlog/"));
+        return View(XmlFileModel.Populate("/Data/SampleBlog/"));
     }
 
     [HttpPost]
@@ -152,7 +152,7 @@ public class AdminController : Controller
         public static XmlFileModel Populate(string directory)
         {
             var xmlFileModel = new XmlFileModel {FileInfos = new List<FileInfo>()};
-            foreach (var file in Directory.EnumerateFiles(directory))
+            foreach (var file in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + directory))
             {
                 xmlFileModel.FileInfos.Add(new FileInfo(file));
             }
