@@ -58,7 +58,7 @@
                 <label asp-for="Content" class="control-label"></label>
                 <textarea id="myTextarea" class="w-100"></textarea>
                 <textarea hidden asp-for="Content" id="FormattedContent"></textarea>
-                <input hidden asp-for="Abstract" id="UnformattedContent"/>
+                <textarea hidden asp-for="Abstract" id="UnformattedContent"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
         </div>
@@ -92,7 +92,7 @@
     setup: function (editor){
         editor.on('change', function (e){            
             document.getElementById("FormattedContent").innerHTML = tinymce.get("myTextarea").getContent();
-            document.getElementById("UnformattedContent").innerHTML = tinymce.get("myTextarea").getContent({format:"text"});
+            document.getElementById("UnformattedContent").innerHTML = tinymce.get("myTextarea").getContent({format:'text'});
             });
         },
     // width: 100,
