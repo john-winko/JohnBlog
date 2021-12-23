@@ -167,6 +167,13 @@ Null reference error when no posts
 Disabled fields to not get posted back
 	Work around with styling background-color and color (for text) to match the look of disabled 
 	Set input to readonly
+Post.Create
+	Moved around elements for better input
+	Abstract is parsed from non-html content of Post.Content via javascript (using substring(0,199))
+Post.Edit
+	Copied changes done to Post.Create 
+	Moved delete button up top
+	Updated action to capture changes in all updateable fields
 Moved tincymce.init() and AddTags() into their own .js files
 
 *******************************************************************************
@@ -197,7 +204,7 @@ When changing the author for a blog, posts aren't updated
 	They can't edit even though the they now own the blog 
 	Prior posts were done by new author so need to figure out how to better handle "change of command"
 	Add conditional elements for administrator to edit?
-Add pinning from administator on which blogs to show first on home page
+Add pinning from administrator on which blogs to show first on home page
 Save profile photos of different sizes (with a max size); Full size, side bar, icon sizes
 Posts.Index toggle between cards/table views by user selection
 Verify all login request redirect to the page they came from (i.e. comments)
