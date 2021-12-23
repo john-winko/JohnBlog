@@ -30,6 +30,9 @@ namespace JohnBlog.Controllers
                 .OrderByDescending(p => p.Created)
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser);
+            
+            if (!applicationDbContext.Any()) return RedirectToAction("Index", "Home");
+            
             ViewData["BlogUserId"] = applicationDbContext.FirstOrDefault()!.BlogUserId;
             return View(await applicationDbContext.ToListAsync());
         }
