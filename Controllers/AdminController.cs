@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JohnBlog.Controllers;
 
+// TODO: use custom attribute editor
+[Authorize(Roles = "Administrator")]
 public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -21,8 +23,6 @@ public class AdminController : Controller
     }
 
     // GET
-    // TODO: use custom attribute editor
-    [Authorize(Roles = "Administrator")]
     public IActionResult GetRoles()
     {
         var users = GetBlogUsersWithRoles();
@@ -106,51 +106,39 @@ public class AdminController : Controller
         return RedirectToAction("GetRoles");
     }
 
-    [Authorize(Roles = "Administrator")]
     public IActionResult XmlFiles()
     {
-        var xml = XmlFileModel.Populate("Data/SampleBlog/");
-        // {
-        //     FileNames = Directory.EnumerateFiles("Data/SampleBlog/"),
-        //     FileInfos = () => {}
-        // };
-
-        return View(xml);
+        return View(XmlFileModel.Populate("Data/SampleBlog/"));
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> XmlFiles([Bind("FileNames,FileInfos,FormFile")] XmlFileModel xmlFileModel)
     {
         var formFile = xmlFileModel.FormFile;
         if (formFile is null) return View("XmlFiles");
         var fileUploadPath = Directory.GetCurrentDirectory() + $"/Data/SampleBlog/{formFile.FileName}";
-        // FileInfo file = new FileInfo(fileUploadPath);
-
         using var fileStream = new FileStream(fileUploadPath, FileMode.OpenOrCreate);
         await formFile.CopyToAsync(fileStream);
 
         return RedirectToAction("XmlFiles");
     }
 
-    [Authorize(Roles = "Administrator")]
     public async Task<IActionResult> GenerateXmlFiles()
     {
         await _dataService.SaveAllXml();
         return RedirectToAction("XmlFiles");
     }
-    
-    [Authorize(Roles = "Administrator")]
+
     public async Task<IActionResult> LoadXmlFiles()
     {
         await _dataService.SeedDatabaseAsync(true);
         return RedirectToAction("XmlFiles");
     }
-    
+
     public class XmlFileModel
     {
-        public List<FileInfo> FileInfos { get; set; }
+        public List<FileInfo>? FileInfos { get; set; }
         public IFormFile? FormFile { get; set; }
 
         public XmlFileModel()
@@ -159,12 +147,12 @@ public class AdminController : Controller
 
         public static XmlFileModel Populate(string directory)
         {
-            var xmlFileModel = new XmlFileModel();
-            xmlFileModel.FileInfos = new List<FileInfo>();
+            var xmlFileModel = new XmlFileModel {FileInfos = new List<FileInfo>()};
             foreach (var file in Directory.EnumerateFiles(directory))
             {
                 xmlFileModel.FileInfos.Add(new FileInfo(file));
             }
+
             return xmlFileModel;
         }
     }

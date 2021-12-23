@@ -8,6 +8,7 @@
 <a asp-action="GenerateXmlFiles" asp-controller="Admin">Generate Files</a>
 <a asp-action="LoadXmlFiles" asp-controller="Admin">Reset Database</a>
 <hr/>
+@*TODO: make it prettier *@
 <form enctype="multipart/form-data" asp-action="XmlFiles" asp-controller="Admin" method="post">
     @Html.Hidden("FileInfos", Model!.FileInfos)
     <ul>
