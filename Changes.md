@@ -167,6 +167,7 @@ Null reference error when no posts
 Disabled fields to not get posted back
 	Work around with styling background-color and color (for text) to match the look of disabled 
 	Set input to readonly
+Moved tincymce.init() and AddTags() into their own .js files
 
 *******************************************************************************
 TODO:
