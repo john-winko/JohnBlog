@@ -183,6 +183,8 @@ namespace JohnBlog.Controllers
                         .FirstOrDefault(p => p.Id == post.Id);
                     postUpdate!.Updated = DateTime.Now;
                     postUpdate.ReadyStatus = post.ReadyStatus;
+                    postUpdate.Content = post.Content;
+                    postUpdate.Abstract = post.Abstract;
                     
                     // Remove all tags 
                     postUpdate.Tags.Clear();

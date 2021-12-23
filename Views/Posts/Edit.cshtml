@@ -4,25 +4,35 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit - Post</h1>
-
-<hr/>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
+    <div class="col-11">
+
+        <h1>Edit - Post</h1>
+    </div>
+    <div class="col-1">
+        @* TODO: fix sizing and make right justified for different screen sizes*@
+        <a asp-action="Delete" asp-route-Id="@Model!.Id">
+            <button type="button" class="btn rounded-pill bg-warning h-100 w-100">Delete</button>
+        </a>
+    </div>
+
+</div>
+<hr/>
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id"/>
             <input type="hidden" asp-for="BlogId"/>
             <input type="hidden" asp-for="BlogUserId"/>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control"/>
+                <textarea asp-for="Title" class="form-control" rows="2"></textarea>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Abstract" class="control-label"></label>
-                <input asp-for="Abstract" class="form-control"/>
+                <textarea asp-for="Abstract" class="form-control" rows="4" readonly id="UnformattedContent" style="background-color: #c0c0c0; color: #000000;"></textarea>
                 <span asp-validation-for="Abstract" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Created"/>
@@ -33,14 +43,8 @@
             </div>
             <input type="hidden" asp-for="Slug"/>
             <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                @* Hide the bound area and use the init property to populate the control to preserve formatting *@
-                <input class="form-control" id="myTextarea"/>
-                <textarea hidden asp-for="Content" id="FormattedContent"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="input-group mb-3 col-6">
+                <label asp-for="Tags" class="control-label"></label>
+                <div class="input-group form-control">
                     <span class="input-group-text">#</span>
                     <input type="text" class="form-control" placeholder="Tag Text" aria-label="Tag" id="TagEntry">
                     <button type="button" class="btn btn-primary" onclick="AddTag()">
@@ -63,16 +67,24 @@
                     </ul>
                 </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary"/>
+        </div>
+        <div class="col">
+            <div class="form-group h-100">
+                <label asp-for="Content" class="control-label"></label>
+                @* Hide the bound area and use the init property to populate the control to preserve formatting *@
+                <input class="w-100" id="myTextarea"/>
+                <textarea hidden asp-for="Content" id="FormattedContent"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-        </form>
+        </div>
     </div>
+    <div class="form-group text-center m-3">
+        <input type="submit" value="Save" class="btn btn-primary w-100"/>
+    </div>
+</form>
+<div class="text-center">
     <a asp-action="PostsByBlogIndex" asp-route-blogId="@Model!.BlogId">Back to List</a>
 </div>
-<a asp-action="Delete" asp-route-Id="@Model!.Id">
-    <button class="btn rounded-pill bg-warning">Delete</button>
-</a>
 
 @section Scripts
 {
@@ -98,10 +110,11 @@
             });
         editor.on('change', function (e){            
             document.getElementById("FormattedContent").innerHTML = tinymce.get("myTextarea").getContent();
+            document.getElementById("UnformattedContent").innerHTML = tinymce.get("myTextarea").getContent({format:'text'}).substring(0,199);
             });
         },
-    width: 600,
-    height: 300,
+    // width: 600,
+    height: 600,
     plugins: [
       'advlist autolink link image lists charmap print preview hr anchor pagebreak',
       'searchreplace wordcount visualblocks visualchars code codesample fullscreen insertdatetime media nonbreaking',
@@ -114,7 +127,7 @@
       favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
     },
     menubar: 'favs file edit view insert format tools table help',
-    content_css: 'css/content.css',
+    // content_css: 'css/content.css',
     image_title:true,
     remove_trailing_brs: false,
     automatic_uploads:true,

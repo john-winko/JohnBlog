@@ -164,13 +164,16 @@ Got an error page when deleting a post that had comments on it
 	Updated Post.DeleteConfirmed to remove comments, save then remove Post
 Null reference error when no posts
 	Updated Home.Index to only show partial view if Posts.Any()
+Disabled fields to not get posted back
+	Work around with styling background-color and color (for text) to match the look of disabled 
+	Set input to readonly
 
 *******************************************************************************
 TODO:
 *******************************************************************************
 Add badges (new) for new content/posts/comments
 Updated registration page for confirmation since we have a registered email sender now
-Tags with ajax autofill/autocomplete
+Tags with ajax autofill/autocomplete and partial view for display
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
 Make a separate view for authors to see drafts / create posts
