@@ -6,7 +6,7 @@
         });
         editor.on('change', function (e){
             document.getElementById("FormattedContent").innerHTML = tinymce.get("myTextarea").getContent();
-            document.getElementById("UnformattedContent").innerHTML = tinymce.get("myTextarea").getContent({format:'text'}).substring(0,199);
+            document.getElementById("UnformattedContent").innerHTML = tinymce.get("myTextarea").getContent({format:'text'}).substring(0,190);
         });
     },
     // width: 600,

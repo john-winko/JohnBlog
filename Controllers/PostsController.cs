@@ -7,6 +7,7 @@ using JohnBlog.Models;
 using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace JohnBlog.Controllers
 {
@@ -112,12 +113,16 @@ namespace JohnBlog.Controllers
             [Bind("Id,BlogUserId,BlogId,Title,Abstract,Content,ReadyStatus")]
             Post post, IFormFile? formFile, List<string> tagEntries)
         {
+            // custom handling of modelstate for abstract
+            post.Abstract = post.Abstract!.Remove(199);
+            ModelState["Abstract"]!.ValidationState = ModelValidationState.Valid;
+            
             if (ModelState.IsValid)
             {
                 post.Created = DateTime.Now;
                 post.BlogUserId = _userManager.GetUserId(User);
                 post.BlogImage = await formFile.ToDbString() ?? post.BlogImage;
-
+                
                 var slug = _slugService.GenerateUrlSlug(post.Title);
 
                 // Error check slug before adding
@@ -173,6 +178,10 @@ namespace JohnBlog.Controllers
             Post post, List<string> tagEntries)
         {
             if (id != post.Id) return NotFound();
+            
+            // custom handling of modelstate for abstract
+            post.Abstract = post.Abstract!.Remove(199);
+            ModelState["Abstract"]!.ValidationState = ModelValidationState.Valid;
 
             if (ModelState.IsValid)
             {

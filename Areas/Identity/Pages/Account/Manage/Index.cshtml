@@ -35,9 +35,10 @@
                 <label asp-for="Input.Title" class="form-label"></label>
                 <span asp-validation-for="Input.Title" class="text-danger"></span>
             </div>
-            <div class="form-floating">
-                <input type="text" asp-for="Input.Blurb" class="form-control"/>
+            @* TODO: Customize form->default scaffolding does not play nice with customization*@
+            <div class="form-group">
                 <label asp-for="Input.Blurb" class="form-label"></label>
+                <textarea asp-for="Input.Blurb" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Input.Blurb" class="text-danger"></span>
             </div>
             <div class="form-floating">

@@ -175,7 +175,10 @@ Post.Edit
 	Moved delete button up top
 	Updated action to capture changes in all updateable fields
 Moved tincymce.init() and AddTags() into their own .js files
-
+Modified User.Index page to use larger textbox for blurb
+	Form did not play well with modifications, scaffolded class elements are not bootstrap specific/compatible
+Updated tiny setup to only grab 0,190 to account for /r/n being added
+	Enforced more protection in 
 *******************************************************************************
 TODO:
 *******************************************************************************
@@ -185,6 +188,7 @@ Tags with ajax autofill/autocomplete and partial view for display
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
 Make a separate view for authors to see drafts / create posts
+Make a custom.css for use with tiny mce and apply it to post.details
 Make a separate view to moderate comments by newest
 Assign viewership
 	Guest can only see Production ready posts
