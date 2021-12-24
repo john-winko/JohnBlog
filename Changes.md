@@ -180,11 +180,13 @@ Modified User.Index page to use larger textbox for blurb
 Updated tiny setup to only grab 0,190 to account for /r/n being added
 	Enforced more protection in Post.Create and Post.Edit to trim off excess chars on Post.Abstract
 Home.Index metrics for numbers filtered down to only posts in production
+Updated timestamps in database so non-lorem ipsum posts show first
 
 *******************************************************************************
 TODO:
 *******************************************************************************
 Add badges (new) for new content/posts/comments
+Make links for auto login
 Updated registration page for confirmation since we have a registered email sender now
 Tags with ajax autofill/autocomplete and partial view for display
 Calculate the Post abstract by parsing out the html
@@ -192,6 +194,7 @@ Implement more hardened security for authorization (people navigating directly t
 Make a separate view for authors to see drafts / create posts
 Make a custom.css for use with tiny mce and apply it to post.details
 Make a separate view to moderate comments by newest
+Limit number of Posts returned on Post.Index
 Assign viewership
 	Guest can only see Production ready posts
 	Viewers can see previews
@@ -201,11 +204,16 @@ Code review
 Change colors and make plus into checkmark for Admin.GetUsersByRole
 Add download/upload of zip folders with all files for backup
 
+Post.Create redirect to post.details
+Post.Details save url redirect
 
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Change navbar to show Welcome [Name]
+	Realign within viewport @media
 Filter down selection list to those assigned as an author for Blog.Edit
+Add go live dates for posts
 When changing the author for a blog, posts aren't updated 
 	They can't edit even though the they now own the blog 
 	Prior posts were done by new author so need to figure out how to better handle "change of command"
