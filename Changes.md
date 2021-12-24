@@ -178,7 +178,9 @@ Moved tincymce.init() and AddTags() into their own .js files
 Modified User.Index page to use larger textbox for blurb
 	Form did not play well with modifications, scaffolded class elements are not bootstrap specific/compatible
 Updated tiny setup to only grab 0,190 to account for /r/n being added
-	Enforced more protection in 
+	Enforced more protection in Post.Create and Post.Edit to trim off excess chars on Post.Abstract
+Home.Index metrics for numbers filtered down to only posts in production
+
 *******************************************************************************
 TODO:
 *******************************************************************************

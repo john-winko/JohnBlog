@@ -20,7 +20,7 @@
                     <a asp-controller="Posts" asp-action="PostsByBlogIndex" asp-route-blogId="@item.Id" class="stretched-link"></a>
                 </div>
                 <div class="card-footer">
-                    @item.Posts.Count posts by @item.BlogUser!.FirstName @item.BlogUser!.LastName
+                    @item.Posts.Where(p=>p.ReadyStatus == ReadyStatus.Production).ToList().Count posts by @item.BlogUser!.FirstName @item.BlogUser!.LastName
                     @if (isAdmin)
                     {
                         // set z-index higher allows clicking with stretched-link
