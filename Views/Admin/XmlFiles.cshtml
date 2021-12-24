@@ -15,7 +15,7 @@
         @foreach (var s in Model!.FileInfos!)
         {
             <li>
-                @s.Name, @s.LastWriteTime.ToString("f")
+                @s.Name, @s.LastWriteTime.ToString("f"), <a asp-action="DownloadXmlFile" asp-controller="Admin" asp-route-fullPath="@s.FullName" asp-route-fileName="@s.Name">download</a>
             </li>
         }
     </ul>

@@ -181,6 +181,7 @@ Updated tiny setup to only grab 0,190 to account for /r/n being added
 	Enforced more protection in Post.Create and Post.Edit to trim off excess chars on Post.Abstract
 Home.Index metrics for numbers filtered down to only posts in production
 Updated timestamps in database so non-lorem ipsum posts show first
+Added download links to Admin.Files, refreshed the XML files by generation
 
 *******************************************************************************
 TODO:
