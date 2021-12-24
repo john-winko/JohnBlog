@@ -5,13 +5,13 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h2>New Post</h2>
 
-<h4>Post</h4>
 <hr/>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+<form asp-action="Create" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-4">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BlogUserId"/>
             <div class="form-group">
@@ -20,12 +20,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control"/>
+                <textarea asp-for="Title" class="form-control" rows="2"></textarea>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Abstract" class="control-label"></label>
-                <textarea asp-for="Abstract" class="form-control"></textarea>
+                <textarea asp-for="Abstract" class="form-control" rows="4" readonly id="UnformattedContent" style="background-color: #c0c0c0; color: #000000;"></textarea>
                 <span asp-validation-for="Abstract" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,14 +39,9 @@
                 <span asp-validation-for="BlogImage" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <textarea id="myTextarea"></textarea>
-                <textarea hidden asp-for="Content" id="FormattedContent"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 @* TODO: Add logic to split tags by comma for easier entry *@
-                <div class="input-group mb-3 col-6">
+                <label asp-for="Tags" class="control-label"></label>
+                <div class="input-group form-control">
                     <span class="input-group-text">#</span>
                     <input type="text" class="form-control" placeholder="Tag Text" aria-label="Tag" id="TagEntry">
                     <button type="button" class="btn btn-primary" onclick="AddTag()">
@@ -54,102 +49,29 @@
                     </button>
                 </div>
                 <div>
-                    <ul id="TagList" class="list-group list-group-horizontal">
-
-                    </ul>
+                    @*TODO: cleanup the look and feel of tag elements*@
+                    <ul id="TagList" class="list-group list-group-horizontal"></ul>
                 </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
+        </div>
+        <div class="col">
+            <div class="form-group h-100">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea id="myTextarea" class="w-100"></textarea>
+                <textarea hidden asp-for="Content" id="FormattedContent"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
+    <div class="form-group text-center m-3">
+        <input type="submit" value="Create" class="btn btn-primary w-100"/>
+    </div>
+</form>
+<div class="text-center">
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts
 {
-    <script type="text/javascript">
-    
-    function AddTag() {
-        var tagEntry = document.getElementById("TagEntry");
-        let list = document.getElementById("TagList");
-        list.innerHTML += `
-    <li class="list-group-item">
-        <button type="button" onclick="parentElement.remove();"><i class="bi bi-x-circle"></i></button>
-        #${tagEntry.value}
-        <input type='hidden' name='tagEntries[]' value='${tagEntry.value}'/>    
-        </li>`;
-        tagEntry.value = "";
-    }
-            
-  tinymce.init({
-    selector: '#myTextarea',
-    setup: function (editor){
-        editor.on('change', function (e){            
-            document.getElementById("FormattedContent").innerHTML = tinymce.get("myTextarea").getContent();
-            });
-        },
-    width: 600,
-    height: 300,
-    plugins: [
-      'advlist autolink link image lists charmap print preview hr anchor pagebreak',
-      'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-      'table emoticons template paste help'
-    ],
-    toolbar: 'fullscreen undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-      'bullist numlist outdent indent | link image | print preview media | ' +
-      'forecolor backcolor emoticons | help',
-    menu: {
-      favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
-    },
-    menubar: 'favs file edit view insert format tools table help',
-    content_css: 'css/content.css',
-    image_title:true,
-    automatic_uploads:true,
-    file_picker_types: 'image',
-      /* and here's our custom image picker*/
-      file_picker_callback: function (cb, value, meta) {
-        var input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-    
-        /*
-          Note: In modern browsers input[type="file"] is functional without
-          even adding it to the DOM, but that might not be the case in some older
-          or quirky browsers like IE, so you might want to add it to the DOM
-          just in case, and visually hide it. And do not forget do remove it
-          once you do not need it anymore.
-        */
-    
-        input.onchange = function () {
-          var file = this.files[0];
-    
-          var reader = new FileReader();
-          reader.onload = function () {
-            /*
-              Note: Now we need to register the blob in TinyMCEs image blob
-              registry. In the next release this part hopefully won't be
-              necessary, as we are looking to handle it internally.
-            */
-            var id = 'blobid' + (new Date()).getTime();
-            var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-            var base64 = reader.result.split(',')[1];
-            var blobInfo = blobCache.create(id, file, base64);
-            blobCache.add(blobInfo);
-    
-            /* call the callback and populate the Title field with the file name */
-            cb(blobInfo.blobUri(), { title: file.name });
-          };
-          reader.readAsDataURL(file);
-        };
-    
-        input.click();
-      },
-      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-  });
-  </script>
+    <script src="~/js/tinySetup.js"></script>
 }

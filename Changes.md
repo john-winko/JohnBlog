@@ -164,34 +164,64 @@ Got an error page when deleting a post that had comments on it
 	Updated Post.DeleteConfirmed to remove comments, save then remove Post
 Null reference error when no posts
 	Updated Home.Index to only show partial view if Posts.Any()
+Disabled fields to not get posted back
+	Work around with styling background-color and color (for text) to match the look of disabled 
+	Set input to readonly
+Post.Create
+	Moved around elements for better input
+	Abstract is parsed from non-html content of Post.Content via javascript (using substring(0,199))
+Post.Edit
+	Copied changes done to Post.Create 
+	Moved delete button up top
+	Updated action to capture changes in all updateable fields
+Moved tincymce.init() and AddTags() into their own .js files
+Modified User.Index page to use larger textbox for blurb
+	Form did not play well with modifications, scaffolded class elements are not bootstrap specific/compatible
+Updated tiny setup to only grab 0,190 to account for /r/n being added
+	Enforced more protection in Post.Create and Post.Edit to trim off excess chars on Post.Abstract
+Home.Index metrics for numbers filtered down to only posts in production
+Updated timestamps in database so non-lorem ipsum posts show first
+Added download links to Admin.Files, refreshed the XML files by generation
 
 *******************************************************************************
 TODO:
 *******************************************************************************
 Add badges (new) for new content/posts/comments
+Make links for auto login
 Updated registration page for confirmation since we have a registered email sender now
-Tags with ajax autofill/autocomplete
+Tags with ajax autofill/autocomplete and partial view for display
 Calculate the Post abstract by parsing out the html
 Implement more hardened security for authorization (people navigating directly to edit page etc)
 Make a separate view for authors to see drafts / create posts
+Make a custom.css for use with tiny mce and apply it to post.details
 Make a separate view to moderate comments by newest
+Limit number of Posts returned on Post.Index
+Assign viewership
+	Guest can only see Production ready posts
+	Viewers can see previews
 Code review
 	Make sure to only show posts in production status
 	Move custom inline styles to stylesheet
 Change colors and make plus into checkmark for Admin.GetUsersByRole
 Add download/upload of zip folders with all files for backup
 
+Post.Create redirect to post.details
+Post.Details save url redirect
 
 *******************************************************************************
 Way Later:
 *******************************************************************************
+Change navbar to show Welcome [Name]
+	Realign within viewport @media
 Filter down selection list to those assigned as an author for Blog.Edit
+Add go live dates for posts
 When changing the author for a blog, posts aren't updated 
 	They can't edit even though the they now own the blog 
 	Prior posts were done by new author so need to figure out how to better handle "change of command"
 	Add conditional elements for administrator to edit?
-Add pinning from administator on which blogs to show first on home page
+Add pinning from administrator on which blogs to show first on home page
 Save profile photos of different sizes (with a max size); Full size, side bar, icon sizes
+Posts.Index toggle between cards/table views by user selection
 Verify all login request redirect to the page they came from (i.e. comments)
 Tried making an area for admin but routing keeps getting borked and views do not show asp-action etc for a links
 Add OAuth logins and registration

@@ -4,6 +4,7 @@ using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
 
 namespace JohnBlog.Controllers;
 
@@ -136,6 +137,15 @@ public class AdminController : Controller
         return RedirectToAction("XmlFiles");
     }
 
+    public IActionResult DownloadXmlFile(string fullPath, string fileName)
+    {
+        var fileResult = new PhysicalFileResult(fullPath, MimeTypes.GetMimeType(fullPath))
+        {
+            FileDownloadName = fileName
+        };
+        return fileResult;
+    }
+    
     public class XmlFileModel
     {
         // ReSharper disable once MemberCanBePrivate.Global

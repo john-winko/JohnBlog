@@ -15,7 +15,7 @@
         var drafts = Model!.Where(p => p.ReadyStatus != ReadyStatus.Production).ToList();
         if (drafts.Any())
         {
-            <h1>Draft</h1>
+            <h1>Draft / Preview</h1>
             @foreach (var draft in drafts)
             {
                 <div class="col-lg-4 col-12 p-2">
@@ -41,7 +41,7 @@
         <h1>Production</h1>
     }
 
-    @foreach (var item in Model!)
+    @foreach (var item in Model!.Where(p => p.ReadyStatus == ReadyStatus.Production).ToList())
     {
         <div class="col-lg-4 col-12 p-2">
             <div class="card h-100 bg-light">

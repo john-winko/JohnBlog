@@ -14,7 +14,11 @@
 }
 <div class="row">
     @*TODO: add responsive cols and left bar with share to social media icons*@
-    <div class="col-9">@Html.Raw(Model!.Content)</div>
+    <div class="col-9">
+        <h1 class="text-center">@Model!.Title</h1>
+        <hr/>
+        @Html.Raw(Model.Content)
+    </div>
     <div class="col-3 text-center">
         <h2>@Model.Blog!.Name</h2>
         @foreach (var tag in Model.Tags)
