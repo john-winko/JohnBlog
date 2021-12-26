@@ -184,6 +184,20 @@ Updated timestamps in database so non-lorem ipsum posts show first
 Added download links to Admin.Files, refreshed the XML files by generation
 
 *******************************************************************************
+Ensuring appsettings.json doesn't get pushed
+*******************************************************************************
+used a local branch of demo with changed gitignore to allow appsettings.json to be uploaded
+installed heroku cli : https://devcenter.heroku.com/articles/heroku-cli#download-and-install
+	^ didn't work... used npm install -g heroku
+	that worked better... heroku login (then press a key) to OAuth credentials
+	cli breaks down with build packs... just resetting to include the appsettings but replace keys with env variables via code
+Added and tracked appsettings.json with [HIDDEN] fields 
+	pushed to remote
+	$ git update-index --skip-worktree appsettings.json
+	excluded from project
+	tested small changes to verify local file doesn't overwrite or get overwritten
+
+*******************************************************************************
 TODO:
 *******************************************************************************
 Add badges (new) for new content/posts/comments
