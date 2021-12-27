@@ -202,7 +202,11 @@ Deploy Prep:
 	Change keys depending on dev/prod
 		Remote appsettings.json has "[HIDDEN]" for any sensitive keys which have to be saved locally or retrieved remotely
 		Connection string in Program.cs
+			DataService builds that connection string from given remote variable: URL
 		MailSettings in EmailService
+	Site works when deployed and data is shown in tables
+		cannot log into database remotely or view tables with free plan on heroku
+		most likely suspect is tables are created but not seeded
 	
 *******************************************************************************
 TODO:
