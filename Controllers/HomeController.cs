@@ -1,10 +1,12 @@
 ﻿using JohnBlog.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Net;
 using JohnBlog.Data;
 using JohnBlog.Enums;
 using JohnBlog.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 
 namespace JohnBlog.Controllers
 {
@@ -19,6 +21,20 @@ namespace JohnBlog.Controllers
             _context = context;
         }
 
+        public IActionResult ShowLog()
+        {
+            var fullPath = Directory.GetCurrentDirectory() + "/Log.txt";
+            var bytes = System.IO.File.ReadAllBytes(fullPath);
+            return new FileContentResult(bytes, "text/plain");
+        }
+        
+        public IActionResult ClearLog()
+        {
+            var fullPath = Directory.GetCurrentDirectory() + "/Log.txt";
+            System.IO.File.Delete(fullPath);
+            return Ok("Deleted");
+        }
+        
         public IActionResult Index()
         {
             // When populating, make sure any FK are populated as well if used for display

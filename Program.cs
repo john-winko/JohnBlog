@@ -5,6 +5,7 @@ using JohnBlog.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,15 @@ builder.Services.AddScoped<SlugService>();
 builder.Services.Configure<MailSettings>(
     builder.Configuration.GetSection(MailSettings.JSONName));
 builder.Services.AddScoped<IEmailSender, EmailService>();
+
+// Setup Serilog and reset log file
+builder.Host.UseSerilog((context, config) =>
+{
+    File.Delete(Directory.GetCurrentDirectory() + "/Log.txt");
+    config.WriteTo.File(Directory.GetCurrentDirectory() + "/Log.txt");
+    // Setup configuration for production/dev environments
+    config.MinimumLevel.Error();
+});
 
 var app = builder.Build();
 

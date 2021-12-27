@@ -207,6 +207,9 @@ Deploy Prep:
 	Site works when deployed and data is shown in tables
 		cannot log into database remotely or view tables with free plan on heroku
 		most likely suspect is tables are created but not seeded
+	Need logging
+		Installed Serilog, Serilog.Sinks.File, Serilog.Extensions.Logging, SeriLog.AspNetCore
+		Set up Serilog as AspNetCore logger with InformationLevel.Error to start
 	
 *******************************************************************************
 TODO:

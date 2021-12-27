@@ -8,6 +8,8 @@ using JohnBlog.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace JohnBlog.Controllers
 {
@@ -16,6 +18,7 @@ namespace JohnBlog.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
         private readonly SlugService _slugService;
+        //private readonly ILogger<PostController> _logger;
 
         public PostsController(ApplicationDbContext context, UserManager<BlogUser> userManager, SlugService slugService)
         {
@@ -31,9 +34,9 @@ namespace JohnBlog.Controllers
                 .OrderByDescending(p => p.Created)
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser);
-            
+
             if (!applicationDbContext.Any()) return RedirectToAction("Index", "Home");
-            
+
             ViewData["BlogUserId"] = applicationDbContext.FirstOrDefault()!.BlogUserId;
             return View(await applicationDbContext.ToListAsync());
         }
@@ -113,36 +116,44 @@ namespace JohnBlog.Controllers
             [Bind("Id,BlogUserId,BlogId,Title,Abstract,Content,ReadyStatus")]
             Post post, IFormFile? formFile, List<string> tagEntries)
         {
-            // custom handling of modelstate for abstract
-            post.Abstract = post.Abstract!.Remove(199);
-            ModelState["Abstract"]!.ValidationState = ModelValidationState.Valid;
-            
-            if (ModelState.IsValid)
+            try
             {
-                post.Created = DateTime.Now;
-                post.BlogUserId = _userManager.GetUserId(User);
-                post.BlogImage = await formFile.ToDbString() ?? post.BlogImage;
-                
-                var slug = _slugService.GenerateUrlSlug(post.Title);
+                // custom handling of modelstate for abstract
+                if (post.Abstract!.Length > 199) post.Abstract = post.Abstract!.Remove(199); 
+                ModelState["Abstract"]!.ValidationState = ModelValidationState.Valid; 
 
-                // Error check slug before adding
-                if (string.IsNullOrEmpty(slug)) ModelState.AddModelError("", "Slug generated was empty");
-                if (!_slugService.IsUnique(slug))
-                    ModelState.AddModelError("Title", "Same title already exists for a post");
-                if (!ModelState.IsValid) return View(post);
+                if (ModelState.IsValid)
+                { 
+                    post.Created = DateTime.Now;
+                    post.BlogUserId = _userManager.GetUserId(User);
+                    post.BlogImage = await formFile.ToDbString() ?? post.BlogImage;
 
-                post.Slug = slug;
+                    var slug = _slugService.GenerateUrlSlug(post.Title);
 
-                foreach (var tagEntry in tagEntries)
-                {
-                    post.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry.ToUpper()});
+                    // Error check slug before adding
+                    if (string.IsNullOrEmpty(slug)) ModelState.AddModelError("", "Slug generated was empty");
+                    if (!_slugService.IsUnique(slug))
+                        ModelState.AddModelError("Title", "Same title already exists for a post");
+                    if (!ModelState.IsValid) return View(post);
+
+                    post.Slug = slug;
+
+                    foreach (var tagEntry in tagEntries)
+                    {
+                        post.Tags.Add(new Tag {PostId = post.Id, TagText = tagEntry.ToUpper()});
+                    }
+
+                    _context.Add(post);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-
+            catch (Exception e)
+            {
+                Log.Error(e.Message + e.StackTrace);Log.CloseAndFlush();
+            }
+            
+            Log.Information("ModelState was not valid");Log.CloseAndFlush();
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
             return View(post);
         }
@@ -178,9 +189,9 @@ namespace JohnBlog.Controllers
             Post post, List<string> tagEntries)
         {
             if (id != post.Id) return NotFound();
-            
+
             // custom handling of modelstate for abstract
-            post.Abstract = post.Abstract!.Remove(199);
+            if (post.Abstract!.Length > 199) post.Abstract = post.Abstract!.Remove(199); 
             ModelState["Abstract"]!.ValidationState = ModelValidationState.Valid;
 
             if (ModelState.IsValid)
@@ -194,7 +205,7 @@ namespace JohnBlog.Controllers
                     postUpdate.ReadyStatus = post.ReadyStatus;
                     postUpdate.Content = post.Content;
                     postUpdate.Abstract = post.Abstract;
-                    
+
                     // Remove all tags 
                     postUpdate.Tags.Clear();
                     await _context.SaveChangesAsync();
@@ -249,11 +260,11 @@ namespace JohnBlog.Controllers
             var comments = _context.Comments!.Where(p => p.PostId == id);
             _context.Comments!.RemoveRange(comments);
             await _context.SaveChangesAsync();
-            
+
             var post = await _context.Posts!.FindAsync(id);
             _context.Posts!.Remove(post!);
             await _context.SaveChangesAsync();
-            
+
             return RedirectToAction(nameof(Index));
         }
 
