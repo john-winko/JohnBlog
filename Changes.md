@@ -197,6 +197,13 @@ Added and tracked appsettings.json with [HIDDEN] fields
 	excluded from project
 	tested small changes to verify local file doesn't overwrite or get overwritten
 
+Deploy Prep:
+	Cannot host private files, only private keys... have to parse out sensitive data and grab remote keys from environment
+	Change keys depending on dev/prod
+		Remote appsettings.json has "[HIDDEN]" for any sensitive keys which have to be saved locally or retrieved remotely
+		Connection string in Program.cs
+		MailSettings in EmailService
+	
 *******************************************************************************
 TODO:
 *******************************************************************************

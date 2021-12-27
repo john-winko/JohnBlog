@@ -15,6 +15,15 @@ public class EmailService : IEmailSender
     public EmailService(IOptions<MailSettings> mailSettings)
     {
         _mailSettings = mailSettings.Value;
+        // update to remote vars if available
+        if (_mailSettings.Mail == "[HIDDEN]")
+        {
+            _mailSettings.Mail = Environment.GetEnvironmentVariable("MAILSETTINGS_MAIL") ?? throw new InvalidOperationException();
+        }
+        if (_mailSettings.Password == "[HIDDEN]")
+        {
+            _mailSettings.Mail = Environment.GetEnvironmentVariable("MAILSETTINGS_PASSWORD") ?? throw new InvalidOperationException();
+        }
     }
 
     public async Task SendEmailAsync(string to, string subject, string message)

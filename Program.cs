@@ -9,7 +9,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Try remote environment vars
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+var connectionString = string.IsNullOrEmpty(databaseUrl) ? 
+    builder.Configuration.GetConnectionString("DefaultConnection") : 
+    DataService.BuildConnectionString(databaseUrl);
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
