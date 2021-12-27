@@ -22,17 +22,21 @@ namespace JohnBlog.Services
             if (reset) await _dbContext.Database.EnsureDeletedAsync();
 
             await _dbContext.Database.EnsureCreatedAsync();
-            //SaveAllXml();
 
             // Have to reset the primary key sequences if we manually seed from scratch
-            if (reset)
+            if (reset || NeedsSeeding())
             {
                 await LoadAllXml();
-                //await SeedDatabaseDefaultAsync();
-                FileInfo file = new FileInfo(Directory.GetCurrentDirectory() + "/Data/FixPostgresSequence.sql");
-                string script = await file.OpenText().ReadToEndAsync();
-                var result = await _dbContext.Database.ExecuteSqlRawAsync(script);
+                var file = new FileInfo(Directory.GetCurrentDirectory() + "/Data/FixPostgresSequence.sql");
+                var script = await file.OpenText().ReadToEndAsync();
+                /*var result =*/ await _dbContext.Database.ExecuteSqlRawAsync(script);
             }
+        }
+
+        private bool NeedsSeeding()
+        {
+            // TODO: add triggers to repopulate if users/database tables are too far out of whack or empty
+            return !_dbContext.Users.Any(p => p.Email == "john.winko@gmail.com");;
         }
 
         public async Task LoadAllXml()
